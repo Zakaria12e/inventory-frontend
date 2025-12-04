@@ -1,26 +1,26 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Package, Folder, AlertTriangle, DollarSign, TrendingUp, Clock } from "lucide-react"
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell, AreaChart, Area } from "recharts"
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, AreaChart, Area } from "recharts"
 import { Separator } from "@/components/ui/separator"
 
 export default function DashboardPage() {
-  const [items, setItems] = useState([
+  const [items] = useState([
     { id: 1, name: "Cement", category: "Materials", stock: 40, price: 50 },
     { id: 2, name: "Pipe", category: "Plumbing", stock: 8, price: 20 },
     { id: 3, name: "Sand", category: "Materials", stock: 90, price: 10 },
     { id: 4, name: "Cable", category: "Electrical", stock: 4, price: 15 },
   ])
 
-  const [categories, setCategories] = useState([
+  const [categories] = useState([
     { id: 1, name: "Materials" },
     { id: 2, name: "Plumbing" },
     { id: 3, name: "Electrical" },
   ])
 
-  const [alerts, setAlerts] = useState([
+  const [alerts] = useState([
     { id: 1, message: "Low stock: Cable (4 units left)", date: "2025-11-01", type: "warning" },
     { id: 2, message: "Low stock: Pipe (8 units left)", date: "2025-10-30", type: "warning" },
     { id: 3, message: "New item added: Cement", date: "2025-10-29", type: "info" },
@@ -55,7 +55,7 @@ export default function DashboardPage() {
   const formatDate = (dateString : any) => {
     const date = new Date(dateString)
     const now = new Date()
-    const diffTime = Math.abs(now - date)
+    const diffTime = Math.abs(now.getTime() - date.getTime())
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
     
     if (diffDays === 0) return "Today"
