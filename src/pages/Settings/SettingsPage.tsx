@@ -33,8 +33,7 @@ import {
   Camera,
   Save,
   Trash2,
-  AlertCircle,
-  CheckCircle2,
+  AlertCircle
 } from "lucide-react"
 import { toast } from "sonner"
 

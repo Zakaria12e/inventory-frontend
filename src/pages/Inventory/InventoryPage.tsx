@@ -249,7 +249,6 @@ export default function InventoryPage() {
                     </tr>
                   ) : (
                     paginatedItems.map((item) => {
-                      const category = categories.find((c) => c.id === item.categoryId)
                       const isLowStock = item.quantity <= item.lowStockThreshold
                       return (
                         <tr key={item.id} className="border-b border-border hover:bg-muted/50">

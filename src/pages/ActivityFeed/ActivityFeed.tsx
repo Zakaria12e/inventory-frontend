@@ -6,10 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, Calendar, User, Package, Trash2, CheckCircle2, Clock, Activity as ActivityIcon, ChevronLeft, ChevronRight, X } from "lucide-react";
+import { Search, Calendar, Package, Trash2, CheckCircle2, Clock, Activity as ActivityIcon, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useAuth } from "@/context/AuthContext";
 
 type Activity = {
   id: string;
@@ -26,7 +25,6 @@ type Activity = {
 };
 
 export default function ActivityFeed() {
-  const { user } = useAuth();
   const [activities, setActivities] = useState<Activity[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
@@ -125,15 +123,6 @@ export default function ActivityFeed() {
     return <ActivityIcon className="w-4 h-4 text-blue-600 dark:text-blue-400" />;
   };
 
-  const getActionBadgeColor = (action: string) => {
-    if (action.toLowerCase().includes("added") || action.toLowerCase().includes("created")) 
-      return "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400";
-    if (action.toLowerCase().includes("deleted") || action.toLowerCase().includes("removed")) 
-      return "bg-rose-100 text-rose-800 dark:bg-rose-900/30 dark:text-rose-400";
-    if (action.toLowerCase().includes("updated") || action.toLowerCase().includes("modified")) 
-      return "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400";
-    return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400";
-  };
 
   const clearFilters = () => {
     setSearchQuery("");
