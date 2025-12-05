@@ -273,10 +273,13 @@ export default function ActivityFeed() {
                                 {activity.user?.first_name?.charAt(0).toUpperCase() || "?"}
                               </AvatarFallback>
                             </Avatar>
-                            <span className="font-medium">
+                            <div>
+                              <div className="font-medium">
                               {activity.user?.first_name || "Unknown User"}
-                            </span>
+                            </div>
                             <div className="text-xs text-muted-foreground">{activity.user?.email}</div>
+                            </div>
+                            
                           </div>
                         </td>
 
