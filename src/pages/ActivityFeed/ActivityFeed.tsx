@@ -1,113 +1,73 @@
-"use client"
+"use client";
 
-import { useEffect, useState, useMemo } from "react"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import {
-  Search,
-  Calendar,
-  Package,
-  Trash2,
-  CheckCircle2,
-  Clock,
-  ActivityIcon,
-  ChevronLeft,
-  ChevronRight,
-  X,
-} from "lucide-react"
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
-import { Skeleton } from "@/components/ui/skeleton"
+import { useEffect, useState, useMemo } from "react";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Search, Calendar, Package, Trash2, CheckCircle2, Clock, Activity as ActivityIcon, ChevronLeft, ChevronRight, X } from "lucide-react";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type Activity = {
-  id: string
+  id: string;
   user?: {
-    _id: string
-    first_name: string
-    email: string
-    avatarColor: string
-    profile_image?: string
-    role: string
-  }
-  action: string
-  timestamp: string
-  date: Date
-}
+    _id: string;
+    first_name: string;
+    email: string;
+    avatarColor: string;
+    profile_image?: string;
+    role: string;
+  };
+  action: string;
+  timestamp: string;
+  date: Date;
+};
 
 export default function ActivityFeed() {
-  const [activities, setActivities] = useState<Activity[]>([])
-  const [searchQuery, setSearchQuery] = useState("")
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc")
-  const [dateFilter, setDateFilter] = useState("")
-  const [currentPage, setCurrentPage] = useState(1)
-  const [loading, setLoading] = useState(true)
-  const [itemsPerPage, setItemsPerPage] = useState(10)
-
-  const demoActivities: Activity[] = [
-    {
-      id: "1",
-      user: {
-        _id: "u1",
-        first_name: "Sarah",
-        email: "sarah@example.com",
-        avatarColor: "bg-blue-500",
-        role: "admin",
-      },
-      action: "Added new inventory item: MacBook Pro 16-inch",
-      timestamp: new Date().toLocaleString(),
-      date: new Date(),
-    },
-    {
-      id: "2",
-      user: {
-        _id: "u2",
-        first_name: "John",
-        email: "john@example.com",
-        avatarColor: "bg-green-500",
-        role: "manager",
-      },
-      action: "Updated stock level for iPhone 15 Pro",
-      timestamp: new Date(Date.now() - 3600000).toLocaleString(),
-      date: new Date(Date.now() - 3600000),
-    },
-    {
-      id: "3",
-      user: {
-        _id: "u3",
-        first_name: "Emma",
-        email: "emma@example.com",
-        avatarColor: "bg-purple-500",
-        role: "staff",
-      },
-      action: "Removed deprecated product from catalog",
-      timestamp: new Date(Date.now() - 7200000).toLocaleString(),
-      date: new Date(Date.now() - 7200000),
-    },
-    {
-      id: "4",
-      user: {
-        _id: "u1",
-        first_name: "Sarah",
-        email: "sarah@example.com",
-        avatarColor: "bg-blue-500",
-        role: "admin",
-      },
-      action: "Modified pricing for Samsung Galaxy Watch",
-      timestamp: new Date(Date.now() - 86400000).toLocaleString(),
-      date: new Date(Date.now() - 86400000),
-    },
-  ]
+  const [activities, setActivities] = useState<Activity[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [dateFilter, setDateFilter] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  
+  const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setActivities(demoActivities)
-      setLoading(false)
-    }, 500)
+    const fetchActivities = async () => {
+      try {
+        setLoading(true);
+        const token = localStorage.getItem("token");
+        if (!token) return;
 
-    return () => clearTimeout(timer)
-  }, [])
+        const res = await fetch(`${API_URL}/activities`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const data = await res.json();
+        if (res.ok && data.success) {
+          setActivities(
+            data.data.map((act: any) => ({
+              id: act._id,
+              user: act.user,
+              action: act.action,
+              timestamp: new Date(act.timestamp).toLocaleString(),
+              date: new Date(act.timestamp),
+            }))
+          );
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchActivities();
+  }, []);
 
   const colorMap: Record<string, string> = {
     "bg-red-500": "#ef4444",
@@ -117,59 +77,61 @@ export default function ActivityFeed() {
     "bg-purple-500": "#8b5cf6",
     "bg-pink-500": "#ec4899",
     "bg-orange-500": "#f97316",
-  }
+  };
 
   const filteredAndSortedActivities = useMemo(() => {
-    const filtered = activities.filter((activity) => {
-      const userName = activity.user?.first_name || ""
-      const userRole = activity.user?.role || ""
+    let filtered = activities.filter((activity) => {
+      const userName = activity.user?.first_name || "";
+      const userRole = activity.user?.role || "";
 
       const matchesSearch =
         userName.toLowerCase().includes(searchQuery.toLowerCase()) ||
         activity.action.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        userRole.toLowerCase().includes(searchQuery.toLowerCase())
+        userRole.toLowerCase().includes(searchQuery.toLowerCase());
 
-      const matchesDate = dateFilter ? activity.date.toISOString().split("T")[0] === dateFilter : true
+      const matchesDate = dateFilter
+        ? activity.date.toISOString().split("T")[0] === dateFilter
+        : true;
 
-      return matchesSearch && matchesDate
-    })
+      return matchesSearch && matchesDate;
+    });
 
     return filtered.sort((a, b) => {
       if (sortOrder === "asc") {
-        return a.date.getTime() - b.date.getTime()
+        return a.date.getTime() - b.date.getTime();
       }
-      return b.date.getTime() - a.date.getTime()
-    })
-  }, [activities, searchQuery, sortOrder, dateFilter])
+      return b.date.getTime() - a.date.getTime();
+    });
+  }, [activities, searchQuery, sortOrder, dateFilter]);
 
-  const totalPages = Math.ceil(filteredAndSortedActivities.length / itemsPerPage)
-  const startIndex = (currentPage - 1) * itemsPerPage
-  const endIndex = startIndex + itemsPerPage
-  const paginatedActivities = filteredAndSortedActivities.slice(startIndex, endIndex)
+  const totalPages = Math.ceil(filteredAndSortedActivities.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedActivities = filteredAndSortedActivities.slice(startIndex, endIndex);
 
   useEffect(() => {
-    setCurrentPage(1)
-  }, [searchQuery, dateFilter, sortOrder])
+    setCurrentPage(1);
+  }, [searchQuery, dateFilter, sortOrder]);
 
   const getIcon = (action: string) => {
-    if (action.toLowerCase().includes("added") || action.toLowerCase().includes("created"))
-      return <Package className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-    if (action.toLowerCase().includes("deleted") || action.toLowerCase().includes("removed"))
-      return <Trash2 className="w-4 h-4 text-rose-600 dark:text-rose-400" />
-    if (action.toLowerCase().includes("updated") || action.toLowerCase().includes("modified"))
-      return <CheckCircle2 className="w-4 h-4 text-amber-600 dark:text-amber-400" />
-    return <ActivityIcon className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-  }
+    if (action.toLowerCase().includes("added") || action.toLowerCase().includes("created")) 
+      return <Package className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />;
+    if (action.toLowerCase().includes("deleted") || action.toLowerCase().includes("removed")) 
+      return <Trash2 className="w-4 h-4 text-rose-600 dark:text-rose-400" />;
+    if (action.toLowerCase().includes("updated") || action.toLowerCase().includes("modified")) 
+      return <CheckCircle2 className="w-4 h-4 text-amber-600 dark:text-amber-400" />;
+    return <ActivityIcon className="w-4 h-4 text-blue-600 dark:text-blue-400" />;
+  };
 
   const clearFilters = () => {
-    setSearchQuery("")
-    setDateFilter("")
-    setSortOrder("desc")
-  }
+    setSearchQuery("");
+    setDateFilter("");
+    setSortOrder("desc");
+  };
 
-  const hasActiveFilters = searchQuery || dateFilter || sortOrder !== "desc"
+  const hasActiveFilters = searchQuery || dateFilter || sortOrder !== "desc";
 
-  return (
+ return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       {/* Header Section */}
       <div className="sticky top-0 z-50 border-b border-border/40 backdrop-blur-sm bg-background/95">
