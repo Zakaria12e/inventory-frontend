@@ -98,7 +98,7 @@ export default function ProfileTab() {
           <div className="flex items-start sm:items-center gap-3 sm:gap-4">
             <Avatar className="h-16 sm:h-20 w-16 sm:w-20 flex-shrink-0">
               <AvatarImage src={avatarPreview} />
-              <AvatarFallback>JD</AvatarFallback>
+              <AvatarFallback>?</AvatarFallback>
             </Avatar>
 
             {/* Hidden input for file */}

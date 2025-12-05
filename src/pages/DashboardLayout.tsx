@@ -52,7 +52,7 @@ import { ModeToggle } from "@/components/mode-toggle";
 import AlertBell from "@/pages/Alerts/AlertBell";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/AuthContext";
-
+const API_URL = import.meta.env.VITE_API_URL
 
 export default function DashboardLayout({ children,}: { children: React.ReactNode;}) {
 
@@ -343,7 +343,7 @@ export default function DashboardLayout({ children,}: { children: React.ReactNod
                   >
                     <Avatar className="h-8 w-8 rounded-lg">
                       <AvatarImage
-                        src={user.profile_image || "/default-avatar.png"}
+                        src={`${API_URL}${user.profile_image}`}
                         alt={user.first_name}
                       />
 <AvatarFallback style={{ backgroundColor: colorMap[user.avatarColor], color: "white" }} className="rounded-lg">
