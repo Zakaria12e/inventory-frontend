@@ -307,82 +307,94 @@ export default function ActivityFeed() {
           </div>
 
           {/* Mobile Card View - Hidden on desktop */}
-          <div className="md:hidden space-y-3">
-            {loading ? (
-              Array.from({ length: 5 }).map((_, i) => (
-                <Card key={i}>
-                  <CardContent className="p-4">
-                    <div className="flex items-start gap-3">
-                      <Skeleton className="w-10 h-10 rounded-full shrink-0" />
-                      <div className="flex-1 space-y-2">
-                        <Skeleton className="h-4 w-24" />
-                        <Skeleton className="h-3 w-full" />
-                        <Skeleton className="h-3 w-20" />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))
-            ) : paginatedActivities.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-12 px-4">
-                <div className="rounded-full bg-muted p-3 mb-3">
-                  <Clock className="h-6 w-6 text-muted-foreground" />
-                </div>
-                <p className="font-medium text-center">No activities found</p>
-                <p className="text-sm text-muted-foreground text-center mt-1">
-                  {hasActiveFilters
-                    ? "Try adjusting your filters"
-                    : "Activities will appear here as users interact with the system"}
-                </p>
-              </div>
-            ) : (
-              paginatedActivities.map((activity) => (
-                <Card key={activity.id} className="hover:bg-muted/50 transition-colors">
-                  <CardContent className="p-4">
-                    <div className="flex items-start gap-3">
-                      <Avatar className="w-10 h-10 shrink-0">
-                        <AvatarImage
-                          src={activity.user?.profile_image || undefined}
-                          alt={activity.user?.first_name}
-                        />
-                        <AvatarFallback
-                          style={{
-                            backgroundColor: colorMap[activity.user?.avatarColor || "bg-blue-500"],
-                            color: "white",
-                          }}
-                        >
-                          {activity.user?.first_name?.charAt(0).toUpperCase() || "?"}
-                        </AvatarFallback>
-                      </Avatar>
-                      
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-start justify-between gap-2 mb-1">
-                          <span className="font-medium text-sm">
-                            {activity.user?.first_name || "Unknown User"}
-                          </span>
-                          <Badge variant="outline" className="text-xs capitalize shrink-0">
-                            {activity.user?.role || "N/A"}
-                          </Badge>
-                        </div>
-                        
-                        <div className="flex items-start gap-2 mb-2">
-                          <div className="shrink-0 mt-0.5">{getIcon(activity.action)}</div>
-                          <p className="text-sm text-muted-foreground leading-relaxed">
-                            {activity.action}
-                          </p>
-                        </div>
-                        
-                        <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                          <Clock className="w-3 h-3" />
-                          <span>{activity.timestamp}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))
-            )}
+{/* Mobile Card View - Hidden on desktop */}
+<div className="md:hidden space-y-3">
+  {loading ? (
+    Array.from({ length: 5 }).map((_, i) => (
+      <Card key={i}>
+        <CardContent className="p-4">
+          <div className="flex items-start gap-3">
+            <Skeleton className="w-10 h-10 rounded-full shrink-0" />
+            <div className="flex-1 space-y-2">
+              <Skeleton className="h-4 w-24" />
+              <Skeleton className="h-3 w-full" />
+              <Skeleton className="h-3 w-20" />
+            </div>
           </div>
+        </CardContent>
+      </Card>
+    ))
+  ) : paginatedActivities.length === 0 ? (
+    <div className="flex flex-col items-center justify-center py-12 px-4">
+      <div className="rounded-full bg-muted p-3 mb-3">
+        <Clock className="h-6 w-6 text-muted-foreground" />
+      </div>
+      <p className="font-medium text-center">No activities found</p>
+      <p className="text-sm text-muted-foreground text-center mt-1">
+        {hasActiveFilters
+          ? "Try adjusting your filters"
+          : "Activities will appear here as users interact with the system"}
+      </p>
+    </div>
+  ) : (
+    paginatedActivities.map((activity) => (
+      <Card key={activity.id} className="transition-colors">
+        <CardContent className="p-4 space-y-3">
+
+          {/* Top Row */}
+          <div className="flex items-start justify-between">
+            <div className="flex items-center gap-3">
+              <Avatar className="w-10 h-10 shrink-0">
+                <AvatarImage
+                  src={activity.user?.profile_image || undefined}
+                  alt={activity.user?.first_name}
+                />
+                <AvatarFallback
+                  style={{
+                    backgroundColor: colorMap[activity.user?.avatarColor || "bg-blue-500"],
+                    color: "white",
+                  }}
+                >
+                  {activity.user?.first_name?.charAt(0).toUpperCase() || "?"}
+                </AvatarFallback>
+              </Avatar>
+
+              <div className="flex flex-col leading-tight">
+                <span className="font-medium text-sm">
+                  {activity.user?.first_name || "Unknown User"}
+                </span>
+                <span className="text-xs text-muted-foreground truncate">
+                  {activity.user?.email}
+                </span>
+              </div>
+            </div>
+
+            <Badge variant="outline" className="text-xs capitalize">
+              {activity.user?.role || "N/A"}
+            </Badge>
+          </div>
+
+          {/* Action */}
+          <div className="flex items-start gap-2">
+            <div className="mt-0.5 shrink-0">
+              {getIcon(activity.action)}
+            </div>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              {activity.action}
+            </p>
+          </div>
+
+          {/* Date bottom-right */}
+          <div className="flex justify-end text-xs text-muted-foreground gap-1">
+            <Clock className="w-3 h-3" />
+            <span>{activity.timestamp}</span>
+          </div>
+        </CardContent>
+      </Card>
+    ))
+  )}
+</div>
+
 
           {/* Pagination */}
           {!loading && totalPages > 1 && (
