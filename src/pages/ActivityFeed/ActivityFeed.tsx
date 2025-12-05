@@ -1,73 +1,113 @@
-"use client";
+"use client"
 
-import { useEffect, useState, useMemo } from "react";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, Calendar, Package, Trash2, CheckCircle2, Clock, Activity as ActivityIcon, ChevronLeft, ChevronRight, X } from "lucide-react";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Skeleton } from "@/components/ui/skeleton";
+import { useEffect, useState, useMemo } from "react"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import {
+  Search,
+  Calendar,
+  Package,
+  Trash2,
+  CheckCircle2,
+  Clock,
+  ActivityIcon,
+  ChevronLeft,
+  ChevronRight,
+  X,
+} from "lucide-react"
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
+import { Skeleton } from "@/components/ui/skeleton"
 
 type Activity = {
-  id: string;
+  id: string
   user?: {
-    _id: string;
-    first_name: string;
-    email: string;
-    avatarColor: string;
-    profile_image?: string;
-    role: string;
-  };
-  action: string;
-  timestamp: string;
-  date: Date;
-};
+    _id: string
+    first_name: string
+    email: string
+    avatarColor: string
+    profile_image?: string
+    role: string
+  }
+  action: string
+  timestamp: string
+  date: Date
+}
 
 export default function ActivityFeed() {
-  const [activities, setActivities] = useState<Activity[]>([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
-  const [dateFilter, setDateFilter] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [loading, setLoading] = useState(true);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
-  
-  const API_URL = import.meta.env.VITE_API_URL;
+  const [activities, setActivities] = useState<Activity[]>([])
+  const [searchQuery, setSearchQuery] = useState("")
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc")
+  const [dateFilter, setDateFilter] = useState("")
+  const [currentPage, setCurrentPage] = useState(1)
+  const [loading, setLoading] = useState(true)
+  const [itemsPerPage, setItemsPerPage] = useState(10)
+
+  const demoActivities: Activity[] = [
+    {
+      id: "1",
+      user: {
+        _id: "u1",
+        first_name: "Sarah",
+        email: "sarah@example.com",
+        avatarColor: "bg-blue-500",
+        role: "admin",
+      },
+      action: "Added new inventory item: MacBook Pro 16-inch",
+      timestamp: new Date().toLocaleString(),
+      date: new Date(),
+    },
+    {
+      id: "2",
+      user: {
+        _id: "u2",
+        first_name: "John",
+        email: "john@example.com",
+        avatarColor: "bg-green-500",
+        role: "manager",
+      },
+      action: "Updated stock level for iPhone 15 Pro",
+      timestamp: new Date(Date.now() - 3600000).toLocaleString(),
+      date: new Date(Date.now() - 3600000),
+    },
+    {
+      id: "3",
+      user: {
+        _id: "u3",
+        first_name: "Emma",
+        email: "emma@example.com",
+        avatarColor: "bg-purple-500",
+        role: "staff",
+      },
+      action: "Removed deprecated product from catalog",
+      timestamp: new Date(Date.now() - 7200000).toLocaleString(),
+      date: new Date(Date.now() - 7200000),
+    },
+    {
+      id: "4",
+      user: {
+        _id: "u1",
+        first_name: "Sarah",
+        email: "sarah@example.com",
+        avatarColor: "bg-blue-500",
+        role: "admin",
+      },
+      action: "Modified pricing for Samsung Galaxy Watch",
+      timestamp: new Date(Date.now() - 86400000).toLocaleString(),
+      date: new Date(Date.now() - 86400000),
+    },
+  ]
 
   useEffect(() => {
-    const fetchActivities = async () => {
-      try {
-        setLoading(true);
-        const token = localStorage.getItem("token");
-        if (!token) return;
+    const timer = setTimeout(() => {
+      setActivities(demoActivities)
+      setLoading(false)
+    }, 500)
 
-        const res = await fetch(`${API_URL}/activities`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        const data = await res.json();
-        if (res.ok && data.success) {
-          setActivities(
-            data.data.map((act: any) => ({
-              id: act._id,
-              user: act.user,
-              action: act.action,
-              timestamp: new Date(act.timestamp).toLocaleString(),
-              date: new Date(act.timestamp),
-            }))
-          );
-        }
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchActivities();
-  }, []);
+    return () => clearTimeout(timer)
+  }, [])
 
   const colorMap: Record<string, string> = {
     "bg-red-500": "#ef4444",
@@ -77,174 +117,179 @@ export default function ActivityFeed() {
     "bg-purple-500": "#8b5cf6",
     "bg-pink-500": "#ec4899",
     "bg-orange-500": "#f97316",
-  };
+  }
 
   const filteredAndSortedActivities = useMemo(() => {
-    let filtered = activities.filter((activity) => {
-      const userName = activity.user?.first_name || "";
-      const userRole = activity.user?.role || "";
+    const filtered = activities.filter((activity) => {
+      const userName = activity.user?.first_name || ""
+      const userRole = activity.user?.role || ""
 
       const matchesSearch =
         userName.toLowerCase().includes(searchQuery.toLowerCase()) ||
         activity.action.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        userRole.toLowerCase().includes(searchQuery.toLowerCase());
+        userRole.toLowerCase().includes(searchQuery.toLowerCase())
 
-      const matchesDate = dateFilter
-        ? activity.date.toISOString().split("T")[0] === dateFilter
-        : true;
+      const matchesDate = dateFilter ? activity.date.toISOString().split("T")[0] === dateFilter : true
 
-      return matchesSearch && matchesDate;
-    });
+      return matchesSearch && matchesDate
+    })
 
     return filtered.sort((a, b) => {
       if (sortOrder === "asc") {
-        return a.date.getTime() - b.date.getTime();
+        return a.date.getTime() - b.date.getTime()
       }
-      return b.date.getTime() - a.date.getTime();
-    });
-  }, [activities, searchQuery, sortOrder, dateFilter]);
+      return b.date.getTime() - a.date.getTime()
+    })
+  }, [activities, searchQuery, sortOrder, dateFilter])
 
-  const totalPages = Math.ceil(filteredAndSortedActivities.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const paginatedActivities = filteredAndSortedActivities.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(filteredAndSortedActivities.length / itemsPerPage)
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const endIndex = startIndex + itemsPerPage
+  const paginatedActivities = filteredAndSortedActivities.slice(startIndex, endIndex)
 
   useEffect(() => {
-    setCurrentPage(1);
-  }, [searchQuery, dateFilter, sortOrder]);
+    setCurrentPage(1)
+  }, [searchQuery, dateFilter, sortOrder])
 
   const getIcon = (action: string) => {
-    if (action.toLowerCase().includes("added") || action.toLowerCase().includes("created")) 
-      return <Package className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />;
-    if (action.toLowerCase().includes("deleted") || action.toLowerCase().includes("removed")) 
-      return <Trash2 className="w-4 h-4 text-rose-600 dark:text-rose-400" />;
-    if (action.toLowerCase().includes("updated") || action.toLowerCase().includes("modified")) 
-      return <CheckCircle2 className="w-4 h-4 text-amber-600 dark:text-amber-400" />;
-    return <ActivityIcon className="w-4 h-4 text-blue-600 dark:text-blue-400" />;
-  };
+    if (action.toLowerCase().includes("added") || action.toLowerCase().includes("created"))
+      return <Package className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+    if (action.toLowerCase().includes("deleted") || action.toLowerCase().includes("removed"))
+      return <Trash2 className="w-4 h-4 text-rose-600 dark:text-rose-400" />
+    if (action.toLowerCase().includes("updated") || action.toLowerCase().includes("modified"))
+      return <CheckCircle2 className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+    return <ActivityIcon className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+  }
 
   const clearFilters = () => {
-    setSearchQuery("");
-    setDateFilter("");
-    setSortOrder("desc");
-  };
+    setSearchQuery("")
+    setDateFilter("")
+    setSortOrder("desc")
+  }
 
-  const hasActiveFilters = searchQuery || dateFilter || sortOrder !== "desc";
+  const hasActiveFilters = searchQuery || dateFilter || sortOrder !== "desc"
 
   return (
-    <div className="flex flex-col gap-4 p-4 md:p-6 lg:p-8 max-w-7xl mx-auto w-full">
-      {/* Header */}
-      <div className="flex flex-col gap-1">
-        <div className="flex items-center gap-2">
-          <Clock className="h-5 w-5 text-primary" />
-          <h1 className="text-2xl font-bold tracking-tight">Activity Feed</h1>
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+      {/* Header Section */}
+      <div className="sticky top-0 z-50 border-b border-border/40 backdrop-blur-sm bg-background/95">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center gap-2">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <Clock className="h-5 w-5 text-primary" />
+              </div>
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-balance">Activity Feed</h1>
+            </div>
+            <p className="text-sm text-muted-foreground">Monitor all system activities and changes in real-time</p>
+          </div>
         </div>
-        <p className="text-sm text-muted-foreground">
-          Monitor all system activities and changes in real-time
-        </p>
       </div>
 
-      <Card>
-        <CardHeader className="pb-3">
-          {/* Filters */}
-          <div className="flex flex-col gap-3">
-            <div className="flex flex-col sm:flex-row gap-2">
-              <div className="flex-1 relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+      {/* Main Content */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Filters Card */}
+        <Card className="mb-8 border-border/50 shadow-sm">
+          <CardHeader className="pb-4">
+            <div className="flex items-center gap-2 mb-4">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <h2 className="font-semibold text-sm">Filter Activities</h2>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              <div className="lg:col-span-2 relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
                 <Input
                   placeholder="Search by user, action, or role..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9 h-9"
+                  className="pl-9 h-10 text-sm"
                 />
               </div>
 
-              <div className="relative w-full sm:w-44">
-                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <div className="relative">
+                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
                 <Input
                   type="date"
                   value={dateFilter}
                   onChange={(e) => setDateFilter(e.target.value)}
-                  className="pl-9 h-9"
+                  className="pl-9 h-10 text-sm"
                 />
               </div>
 
-              <Select value={sortOrder} onValueChange={(v) => setSortOrder(v as any)}>
-                <SelectTrigger className="w-full sm:w-36 h-9">
-                  <SelectValue placeholder="Sort by" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="desc">Newest First</SelectItem>
-                  <SelectItem value="asc">Oldest First</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className="flex gap-2">
+                <Select value={sortOrder} onValueChange={(v) => setSortOrder(v as any)}>
+                  <SelectTrigger className="h-10 text-sm flex-1">
+                    <SelectValue placeholder="Sort" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="desc">Newest First</SelectItem>
+                    <SelectItem value="asc">Oldest First</SelectItem>
+                  </SelectContent>
+                </Select>
 
-              {hasActiveFilters && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={clearFilters}
-                  className="gap-1 h-9"
-                >
-                  <X className="w-4 h-4" />
-                  Clear
-                </Button>
-              )}
+                {hasActiveFilters && (
+                  <Button variant="outline" size="sm" onClick={clearFilters} className="gap-1 h-10 bg-transparent">
+                    <X className="w-4 h-4" />
+                    <span className="hidden sm:inline">Clear</span>
+                  </Button>
+                )}
+              </div>
             </div>
-          </div>
-        </CardHeader>
+          </CardHeader>
+        </Card>
 
-        <CardContent className="pt-0">
-          {/* Desktop Table View - Hidden on mobile */}
-          <div className="hidden md:block border rounded-lg overflow-hidden">
+        {/* Desktop Table View */}
+        <div className="hidden lg:block">
+          <Card className="border-border/50 shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
-                <thead className="bg-muted/50 border-b">
-                  <tr>
-                    <th className="px-4 py-3 text-left font-medium text-xs uppercase tracking-wider">
+                <thead>
+                  <tr className="border-b border-border/50 bg-muted/30">
+                    <th className="px-6 py-4 text-left font-semibold text-xs uppercase tracking-wider text-muted-foreground">
                       User
                     </th>
-                    <th className="px-4 py-3 text-left font-medium text-xs uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left font-semibold text-xs uppercase tracking-wider text-muted-foreground">
                       Role
                     </th>
-                    <th className="px-4 py-3 text-left font-medium text-xs uppercase tracking-wider min-w-[300px]">
+                    <th className="px-6 py-4 text-left font-semibold text-xs uppercase tracking-wider text-muted-foreground">
                       Action
                     </th>
-                    <th className="px-4 py-3 text-right font-medium text-xs uppercase tracking-wider whitespace-nowrap">
+                    <th className="px-6 py-4 text-right font-semibold text-xs uppercase tracking-wider text-muted-foreground">
                       Date & Time
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y">
+                <tbody className="divide-y divide-border/30">
                   {loading ? (
                     Array.from({ length: 5 }).map((_, i) => (
-                      <tr key={i}>
-                        <td className="px-4 py-3">
-                          <div className="flex items-center gap-2">
-                            <Skeleton className="w-8 h-8 rounded-full" />
+                      <tr key={i} className="hover:bg-muted/20 transition-colors">
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-3">
+                            <Skeleton className="w-10 h-10 rounded-full" />
                             <Skeleton className="h-4 w-24" />
                           </div>
                         </td>
-                        <td className="px-4 py-3">
+                        <td className="px-6 py-4">
                           <Skeleton className="h-5 w-16" />
                         </td>
-                        <td className="px-4 py-3">
-                          <Skeleton className="h-4 w-full" />
+                        <td className="px-6 py-4">
+                          <Skeleton className="h-4 w-full max-w-xs" />
                         </td>
-                        <td className="px-4 py-3">
+                        <td className="px-6 py-4">
                           <Skeleton className="h-4 w-32 ml-auto" />
                         </td>
                       </tr>
                     ))
                   ) : paginatedActivities.length === 0 ? (
                     <tr>
-                      <td colSpan={4} className="px-4 py-12 text-center">
-                        <div className="flex flex-col items-center gap-2">
+                      <td colSpan={4} className="px-6 py-16 text-center">
+                        <div className="flex flex-col items-center gap-3">
                           <div className="rounded-full bg-muted p-3">
                             <Clock className="h-6 w-6 text-muted-foreground" />
                           </div>
                           <p className="font-medium">No activities found</p>
-                          <p className="text-sm text-muted-foreground">
+                          <p className="text-sm text-muted-foreground max-w-xs">
                             {hasActiveFilters
                               ? "Try adjusting your filters"
                               : "Activities will appear here as users interact with the system"}
@@ -254,10 +299,10 @@ export default function ActivityFeed() {
                     </tr>
                   ) : (
                     paginatedActivities.map((activity) => (
-                      <tr key={activity.id} className="hover:bg-muted/50 transition-colors">
-                        <td className="px-4 py-3">
-                          <div className="flex items-center gap-2">
-                            <Avatar className="w-8 h-8">
+                      <tr key={activity.id} className="hover:bg-muted/20 transition-colors">
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-3">
+                            <Avatar className="w-10 h-10">
                               <AvatarImage
                                 src={activity.user?.profile_image || undefined}
                                 alt={activity.user?.first_name}
@@ -271,31 +316,29 @@ export default function ActivityFeed() {
                                 {activity.user?.first_name?.charAt(0).toUpperCase() || "?"}
                               </AvatarFallback>
                             </Avatar>
-                            <div className="flex flex-col leading-tight">
-                              <span className="font-medium">
+                            <div className="flex flex-col">
+                              <span className="font-medium text-foreground">
                                 {activity.user?.first_name || "Unknown User"}
                               </span>
-                              <span className="text-xs text-muted-foreground">
-                                {activity.user?.email}
-                              </span>
+                              <span className="text-xs text-muted-foreground">{activity.user?.email}</span>
                             </div>
                           </div>
                         </td>
 
-                        <td className="px-4 py-3">
-                          <Badge variant="outline" className="text-xs capitalize">
+                        <td className="px-6 py-4">
+                          <Badge variant="secondary" className="text-xs capitalize font-medium">
                             {activity.user?.role || "N/A"}
                           </Badge>
                         </td>
 
-                        <td className="px-4 py-3">
-                          <div className="flex items-center gap-2">
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-3">
                             <div className="shrink-0">{getIcon(activity.action)}</div>
-                            <span className="text-muted-foreground">{activity.action}</span>
+                            <span className="text-muted-foreground line-clamp-2">{activity.action}</span>
                           </div>
                         </td>
 
-                        <td className="px-4 py-3 text-right text-muted-foreground text-xs whitespace-nowrap">
+                        <td className="px-6 py-4 text-right text-muted-foreground text-xs whitespace-nowrap">
                           {activity.timestamp}
                         </td>
                       </tr>
@@ -304,153 +347,145 @@ export default function ActivityFeed() {
                 </tbody>
               </table>
             </div>
-          </div>
+          </Card>
+        </div>
 
-          {/* Mobile Card View - Hidden on desktop */}
-{/* Mobile Card View - Hidden on desktop */}
-<div className="md:hidden space-y-3">
-  {loading ? (
-    Array.from({ length: 5 }).map((_, i) => (
-      <Card key={i}>
-        <CardContent className="p-4">
-          <div className="flex items-start gap-3">
-            <Skeleton className="w-10 h-10 rounded-full shrink-0" />
-            <div className="flex-1 space-y-2">
-              <Skeleton className="h-4 w-24" />
-              <Skeleton className="h-3 w-full" />
-              <Skeleton className="h-3 w-20" />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    ))
-  ) : paginatedActivities.length === 0 ? (
-    <div className="flex flex-col items-center justify-center py-12 px-4">
-      <div className="rounded-full bg-muted p-3 mb-3">
-        <Clock className="h-6 w-6 text-muted-foreground" />
-      </div>
-      <p className="font-medium text-center">No activities found</p>
-      <p className="text-sm text-muted-foreground text-center mt-1">
-        {hasActiveFilters
-          ? "Try adjusting your filters"
-          : "Activities will appear here as users interact with the system"}
-      </p>
-    </div>
-  ) : (
-    paginatedActivities.map((activity) => (
-      <Card key={activity.id} className="transition-colors">
-        <CardContent className="p-4 space-y-3">
-
-          {/* Top Row */}
-          <div className="flex items-start justify-between">
-            <div className="flex items-center gap-3">
-              <Avatar className="w-10 h-10 shrink-0">
-                <AvatarImage
-                  src={activity.user?.profile_image || undefined}
-                  alt={activity.user?.first_name}
-                />
-                <AvatarFallback
-                  style={{
-                    backgroundColor: colorMap[activity.user?.avatarColor || "bg-blue-500"],
-                    color: "white",
-                  }}
-                >
-                  {activity.user?.first_name?.charAt(0).toUpperCase() || "?"}
-                </AvatarFallback>
-              </Avatar>
-
-              <div className="flex flex-col leading-tight">
-                <span className="font-medium text-sm">
-                  {activity.user?.first_name || "Unknown User"}
-                </span>
-                <span className="text-xs text-muted-foreground truncate">
-                  {activity.user?.email}
-                </span>
+        {/* Tablet & Mobile Card View */}
+        <div className="lg:hidden space-y-2">
+          {loading ? (
+            Array.from({ length: 5 }).map((_, i) => (
+              <Card key={i} className="border-border/50 shadow-sm">
+                <CardContent className="p-2">
+                  <div className="flex items-start gap-2">
+                    <Skeleton className="w-10 h-10 rounded-full shrink-0" />
+                    <div className="flex-1 space-y-1">
+                      <Skeleton className="h-3 w-32" />
+                      <Skeleton className="h-2 w-full" />
+                      <Skeleton className="h-2 w-20" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))
+          ) : paginatedActivities.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-16 px-4">
+              <div className="rounded-full bg-muted p-4 mb-4">
+                <Clock className="h-6 w-6 text-muted-foreground" />
               </div>
+              <p className="font-semibold text-center text-foreground">No activities found</p>
+              <p className="text-sm text-muted-foreground text-center mt-2">
+                {hasActiveFilters
+                  ? "Try adjusting your filters"
+                  : "Activities will appear here as users interact with the system"}
+              </p>
             </div>
+          ) : (
+            paginatedActivities.map((activity) => (
+              <Card key={activity.id} className="border-border/50 shadow-sm hover:shadow-md transition-shadow">
+                <CardContent className="p-2 sm:p-3">
+                  {/* Top Row - User & Role */}
+                  <div className="flex items-start justify-between gap-2 mb-2">
+                    <div className="flex items-center gap-2 flex-1 min-w-0">
+                      <Avatar className="w-9 h-9 shrink-0">
+                        <AvatarImage src={activity.user?.profile_image || undefined} alt={activity.user?.first_name} />
+                        <AvatarFallback
+                          style={{
+                            backgroundColor: colorMap[activity.user?.avatarColor || "bg-blue-500"],
+                            color: "white",
+                          }}
+                        >
+                          {activity.user?.first_name?.charAt(0).toUpperCase() || "?"}
+                        </AvatarFallback>
+                      </Avatar>
 
-            <Badge variant="outline" className="text-xs capitalize">
-              {activity.user?.role || "N/A"}
-            </Badge>
-          </div>
+                      <div className="flex flex-col min-w-0">
+                        <span className="font-semibold text-foreground text-xs">
+                          {activity.user?.first_name || "Unknown User"}
+                        </span>
+                        <span className="text-xs text-muted-foreground truncate">{activity.user?.email}</span>
+                      </div>
+                    </div>
 
-          {/* Action */}
-          <div className="flex items-start gap-2">
-            <div className="mt-0.5 shrink-0">
-              {getIcon(activity.action)}
-            </div>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              {activity.action}
-            </p>
-          </div>
+                    <Badge variant="secondary" className="text-xs capitalize font-medium shrink-0">
+                      {activity.user?.role || "N/A"}
+                    </Badge>
+                  </div>
 
-          {/* Date bottom-right */}
-          <div className="flex justify-end text-xs text-muted-foreground gap-1">
-            <Clock className="w-3 h-3" />
-            <span>{activity.timestamp}</span>
-          </div>
-        </CardContent>
-      </Card>
-    ))
-  )}
-</div>
+                  {/* Action */}
+                  <div className="flex items-start gap-2 mb-2 pb-2 border-b border-border/30">
+                    <div className="shrink-0 mt-0.5">{getIcon(activity.action)}</div>
+                    <p className="text-xs text-muted-foreground leading-relaxed">{activity.action}</p>
+                  </div>
 
-
-          {/* Pagination */}
-          {!loading && totalPages > 1 && (
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mt-4 pt-4 border-t">
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground">
-                  Showing {startIndex + 1}-{Math.min(endIndex, filteredAndSortedActivities.length)} of{" "}
-                  {filteredAndSortedActivities.length}
-                </span>
-                <Select
-                  value={itemsPerPage.toString()}
-                  onValueChange={(value) => {
-                    setItemsPerPage(Number(value));
-                    setCurrentPage(1);
-                  }}
-                >
-                  <SelectTrigger className="h-8 w-[70px]">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="5">5</SelectItem>
-                    <SelectItem value="10">10</SelectItem>
-                    <SelectItem value="20">20</SelectItem>
-                    <SelectItem value="50">50</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="flex items-center gap-1">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="h-8 w-8"
-                  onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-                  disabled={currentPage === 1}
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-                <div className="flex items-center gap-1 px-2">
-                  <span className="text-sm font-medium">{currentPage}</span>
-                  <span className="text-sm text-muted-foreground">of {totalPages}</span>
-                </div>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="h-8 w-8"
-                  onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
-                  disabled={currentPage === totalPages}
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
+                  {/* Date - Bottom */}
+                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <Clock className="w-3 h-3" />
+                    <span>{activity.timestamp}</span>
+                  </div>
+                </CardContent>
+              </Card>
+            ))
           )}
-        </CardContent>
-      </Card>
+        </div>
+
+        {/* Pagination */}
+        {!loading && totalPages > 1 && (
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-8 pt-6 border-t border-border/30">
+            <div className="flex items-center gap-3 text-sm">
+              <span className="text-muted-foreground">
+                Showing <span className="font-semibold text-foreground">{startIndex + 1}</span>-
+                <span className="font-semibold text-foreground">
+                  {Math.min(endIndex, filteredAndSortedActivities.length)}
+                </span>{" "}
+                of <span className="font-semibold text-foreground">{filteredAndSortedActivities.length}</span>
+              </span>
+              <Select
+                value={itemsPerPage.toString()}
+                onValueChange={(value) => {
+                  setItemsPerPage(Number(value))
+                  setCurrentPage(1)
+                }}
+              >
+                <SelectTrigger className="h-9 w-[75px] text-xs">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="5">5</SelectItem>
+                  <SelectItem value="10">10</SelectItem>
+                  <SelectItem value="20">20</SelectItem>
+                  <SelectItem value="50">50</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-9 w-9 bg-transparent"
+                onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                disabled={currentPage === 1}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <div className="flex items-center gap-2 px-3 text-sm">
+                <span className="font-medium">{currentPage}</span>
+                <span className="text-muted-foreground">/</span>
+                <span className="text-muted-foreground">{totalPages}</span>
+              </div>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-9 w-9 bg-transparent"
+                onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+                disabled={currentPage === totalPages}
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
-  );
+  )
 }
