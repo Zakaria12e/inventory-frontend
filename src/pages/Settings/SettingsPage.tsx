@@ -9,14 +9,7 @@ import { Switch } from "@/components/ui/switch"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import {
   Settings,
   User,
@@ -33,7 +26,7 @@ import {
   Camera,
   Save,
   Trash2,
-  AlertCircle
+  AlertCircle,
 } from "lucide-react"
 import { toast } from "sonner"
 
@@ -63,194 +56,182 @@ export default function SettingsPage() {
   const [twoFactorAuth, setTwoFactorAuth] = useState(false)
   const [sessionTimeout, setSessionTimeout] = useState("30")
 
-  const handleSaveProfile = () => {
+  const handleSave = (callback : any) => {
     setLoading(true)
     setTimeout(() => {
       setLoading(false)
-      toast.success("Profile updated successfully")
-    }, 1000)
-  }
-
-  const handleSaveNotifications = () => {
-    setLoading(true)
-    setTimeout(() => {
-      setLoading(false)
-      toast.success("Notification preferences saved")
-    }, 1000)
-  }
-
-  const handleSaveAppearance = () => {
-    setLoading(true)
-    setTimeout(() => {
-      setLoading(false)
-      toast.success("Appearance settings saved")
-    }, 1000)
-  }
-
-  const handleSaveSecurity = () => {
-    setLoading(true)
-    setTimeout(() => {
-      setLoading(false)
-      toast.success("Security settings updated")
-    }, 1000)
+      callback()
+    }, 800)
   }
 
   return (
-    <div className="flex flex-col gap-6 p-4 md:p-6 lg:p-8 max-w-6xl mx-auto w-full">
+    <div className="flex flex-col gap-4 sm:gap-6 p-3 sm:p-4 md:p-6 lg:p-8 max-w-6xl mx-auto w-full">
       {/* Header */}
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1 sm:gap-2">
         <div className="flex items-center gap-2">
           <Settings className="h-5 w-5 text-primary" />
-          <h1 className="text-2xl font-bold tracking-tight">Settings</h1>
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight">Settings</h1>
         </div>
-        <p className="text-sm text-muted-foreground">
-          Manage your account settings and preferences
-        </p>
+        <p className="text-xs sm:text-sm text-muted-foreground">Manage your account settings and preferences</p>
       </div>
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-2 lg:grid-cols-4 h-auto">
-          <TabsTrigger value="profile" className="gap-2">
+        <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 h-auto gap-1 sm:gap-0 p-1">
+          <TabsTrigger value="profile" className="gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4">
             <User className="h-4 w-4" />
             <span className="hidden sm:inline">Profile</span>
           </TabsTrigger>
-          <TabsTrigger value="notifications" className="gap-2">
+          <TabsTrigger value="notifications" className="gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4">
             <Bell className="h-4 w-4" />
             <span className="hidden sm:inline">Notifications</span>
           </TabsTrigger>
-          <TabsTrigger value="appearance" className="gap-2">
+          <TabsTrigger value="appearance" className="gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4">
             <Palette className="h-4 w-4" />
             <span className="hidden sm:inline">Appearance</span>
           </TabsTrigger>
-          <TabsTrigger value="security" className="gap-2">
+          <TabsTrigger value="security" className="gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4">
             <Shield className="h-4 w-4" />
             <span className="hidden sm:inline">Security</span>
           </TabsTrigger>
         </TabsList>
 
         {/* Profile Tab */}
-        <TabsContent value="profile" className="space-y-4 mt-6">
+        <TabsContent value="profile" className="space-y-3 sm:space-y-4 mt-4 sm:mt-6">
           <Card>
-            <CardHeader>
-              <CardTitle>Profile Information</CardTitle>
-              <CardDescription>
+            <CardHeader className="pb-3 sm:pb-4">
+              <CardTitle className="text-base sm:text-lg">Profile Information</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">
                 Update your personal details and profile picture
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
-              {/* Avatar Section */}
-              <div className="flex items-center gap-4">
-                <Avatar className="h-20 w-20">
+            <CardContent className="space-y-4 sm:space-y-6">
+              <div className="flex items-start sm:items-center gap-3 sm:gap-4">
+                <Avatar className="h-16 sm:h-20 w-16 sm:w-20 flex-shrink-0">
                   <AvatarImage src="https://github.com/shadcn.png" />
                   <AvatarFallback>JD</AvatarFallback>
                 </Avatar>
-                <div className="space-y-2">
-                  <div className="flex gap-2">
-                    <Button size="sm" variant="outline" className="gap-2">
-                      <Camera className="h-4 w-4" />
-                      Change Photo
+                <div className="space-y-2 flex-1">
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <Button size="sm" variant="outline" className="gap-2 text-xs sm:text-sm bg-transparent">
+                      <Camera className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                      <span className="hidden sm:inline">Change Photo</span>
+                      <span className="sm:hidden">Change</span>
                     </Button>
-                    <Button size="sm" variant="ghost" className="text-destructive">
+                    <Button size="sm" variant="ghost" className="text-destructive text-xs sm:text-sm">
                       Remove
                     </Button>
                   </div>
-                  <p className="text-xs text-muted-foreground">
-                    JPG, PNG or GIF. Max size 2MB.
-                  </p>
+                  <p className="text-xs text-muted-foreground">JPG, PNG or GIF. Max 2MB.</p>
                 </div>
               </div>
 
               <Separator />
 
               {/* Name Fields */}
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor="firstName">First Name</Label>
+              <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2">
+                <div className="space-y-1.5 sm:space-y-2">
+                  <Label htmlFor="firstName" className="text-xs sm:text-sm">
+                    First Name
+                  </Label>
                   <Input
                     id="firstName"
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     placeholder="John"
+                    className="h-8 sm:h-10 text-sm"
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="lastName">Last Name</Label>
+                <div className="space-y-1.5 sm:space-y-2">
+                  <Label htmlFor="lastName" className="text-xs sm:text-sm">
+                    Last Name
+                  </Label>
                   <Input
                     id="lastName"
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                     placeholder="Doe"
+                    className="h-8 sm:h-10 text-sm"
                   />
                 </div>
               </div>
 
               {/* Email & Phone */}
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email Address</Label>
+              <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2">
+                <div className="space-y-1.5 sm:space-y-2">
+                  <Label htmlFor="email" className="text-xs sm:text-sm">
+                    Email Address
+                  </Label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                    <Mail className="absolute left-3 top-2 sm:top-2.5 h-4 w-4 text-muted-foreground" />
                     <Input
                       id="email"
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="pl-9"
+                      className="pl-9 h-8 sm:h-10 text-sm"
                       placeholder="john@example.com"
                     />
                   </div>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="phone">Phone Number</Label>
+                <div className="space-y-1.5 sm:space-y-2">
+                  <Label htmlFor="phone" className="text-xs sm:text-sm">
+                    Phone Number
+                  </Label>
                   <Input
                     id="phone"
                     type="tel"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
+                    className="h-8 sm:h-10 text-sm"
                     placeholder="+1 234 567 8900"
                   />
                 </div>
               </div>
 
               {/* Bio */}
-              <div className="space-y-2">
-                <Label htmlFor="bio">Bio</Label>
+              <div className="space-y-1.5 sm:space-y-2">
+                <Label htmlFor="bio" className="text-xs sm:text-sm">
+                  Bio
+                </Label>
                 <Input
                   id="bio"
                   value={bio}
                   onChange={(e) => setBio(e.target.value)}
+                  className="h-8 sm:h-10 text-sm"
                   placeholder="Tell us about yourself"
                 />
               </div>
 
-              <div className="flex justify-end">
-                <Button onClick={handleSaveProfile} disabled={loading} className="gap-2">
-                  <Save className="h-4 w-4" />
+              <div className="flex justify-end pt-2 sm:pt-4">
+                <Button
+                  onClick={() => handleSave(() => toast.success("Profile updated"))}
+                  disabled={loading}
+                  className="gap-2 text-xs sm:text-sm"
+                >
+                  <Save className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   {loading ? "Saving..." : "Save Changes"}
                 </Button>
               </div>
             </CardContent>
           </Card>
 
-          {/* Account Actions */}
+          {/* Danger Zone */}
           <Card className="border-destructive/50">
-            <CardHeader>
-              <CardTitle className="text-destructive">Danger Zone</CardTitle>
-              <CardDescription>
+            <CardHeader className="pb-3 sm:pb-4">
+              <CardTitle className="text-destructive text-base sm:text-lg">Danger Zone</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">
                 Irreversible actions that affect your account
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="space-y-1">
-                  <p className="text-sm font-medium">Delete Account</p>
-                  <p className="text-xs text-muted-foreground">
-                    Permanently delete your account and all data
-                  </p>
+            <CardContent>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4">
+                <div className="space-y-0.5">
+                  <p className="text-xs sm:text-sm font-medium">Delete Account</p>
+                  <p className="text-xs text-muted-foreground">Permanently delete your account and all data</p>
                 </div>
-                <Button variant="destructive" size="sm" className="gap-2">
-                  <Trash2 className="h-4 w-4" />
+                <Button variant="destructive" size="sm" className="gap-2 w-full sm:w-auto text-xs sm:text-sm">
+                  <Trash2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   Delete
                 </Button>
               </div>
@@ -259,105 +240,85 @@ export default function SettingsPage() {
         </TabsContent>
 
         {/* Notifications Tab */}
-        <TabsContent value="notifications" className="space-y-4 mt-6">
+        <TabsContent value="notifications" className="space-y-3 sm:space-y-4 mt-4 sm:mt-6">
           <Card>
-            <CardHeader>
-              <CardTitle>Notification Preferences</CardTitle>
-              <CardDescription>
+            <CardHeader className="pb-3 sm:pb-4">
+              <CardTitle className="text-base sm:text-lg">Notification Preferences</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">
                 Choose how you want to receive notifications
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
-              {/* Email Notifications */}
-              <div className="flex items-center justify-between">
-                <div className="space-y-1">
+            <CardContent className="space-y-3 sm:space-y-6">
+              <div className="flex items-center justify-between gap-2">
+                <div className="space-y-0.5 flex-1">
                   <div className="flex items-center gap-2">
-                    <Mail className="h-4 w-4 text-muted-foreground" />
-                    <Label htmlFor="email-notif" className="font-medium">
+                    <Mail className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                    <Label htmlFor="email-notif" className="font-medium text-xs sm:text-sm">
                       Email Notifications
                     </Label>
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    Receive notifications via email
-                  </p>
+                  <p className="text-xs text-muted-foreground hidden sm:block">Receive notifications via email</p>
                 </div>
-                <Switch
-                  id="email-notif"
-                  checked={emailNotifications}
-                  onCheckedChange={setEmailNotifications}
-                />
+                <Switch id="email-notif" checked={emailNotifications} onCheckedChange={setEmailNotifications} />
               </div>
 
               <Separator />
 
-              {/* Push Notifications */}
-              <div className="flex items-center justify-between">
-                <div className="space-y-1">
+              <div className="flex items-center justify-between gap-2">
+                <div className="space-y-0.5 flex-1">
                   <div className="flex items-center gap-2">
-                    <Bell className="h-4 w-4 text-muted-foreground" />
-                    <Label htmlFor="push-notif" className="font-medium">
+                    <Bell className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                    <Label htmlFor="push-notif" className="font-medium text-xs sm:text-sm">
                       Push Notifications
                     </Label>
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    Receive push notifications in browser
-                  </p>
+                  <p className="text-xs text-muted-foreground hidden sm:block">Receive push notifications in browser</p>
                 </div>
-                <Switch
-                  id="push-notif"
-                  checked={pushNotifications}
-                  onCheckedChange={setPushNotifications}
-                />
+                <Switch id="push-notif" checked={pushNotifications} onCheckedChange={setPushNotifications} />
               </div>
 
               <Separator />
 
-              {/* Low Stock Alerts */}
-              <div className="flex items-center justify-between">
-                <div className="space-y-1">
+              <div className="flex items-center justify-between gap-2">
+                <div className="space-y-0.5 flex-1">
                   <div className="flex items-center gap-2">
-                    <AlertCircle className="h-4 w-4 text-muted-foreground" />
-                    <Label htmlFor="stock-alerts" className="font-medium">
+                    <AlertCircle className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                    <Label htmlFor="stock-alerts" className="font-medium text-xs sm:text-sm">
                       Low Stock Alerts
                     </Label>
                   </div>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-xs text-muted-foreground hidden sm:block">
                     Get notified when items are running low
                   </p>
                 </div>
-                <Switch
-                  id="stock-alerts"
-                  checked={lowStockAlerts}
-                  onCheckedChange={setLowStockAlerts}
-                />
+                <Switch id="stock-alerts" checked={lowStockAlerts} onCheckedChange={setLowStockAlerts} />
               </div>
 
               <Separator />
 
-              {/* Weekly Reports */}
-              <div className="flex items-center justify-between">
-                <div className="space-y-1">
+              <div className="flex items-center justify-between gap-2">
+                <div className="space-y-0.5 flex-1">
                   <div className="flex items-center gap-2">
-                    <Database className="h-4 w-4 text-muted-foreground" />
-                    <Label htmlFor="weekly-reports" className="font-medium">
+                    <Database className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                    <Label htmlFor="weekly-reports" className="font-medium text-xs sm:text-sm">
                       Weekly Reports
                     </Label>
                   </div>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-xs text-muted-foreground hidden sm:block">
                     Receive weekly inventory summary reports
                   </p>
                 </div>
-                <Switch
-                  id="weekly-reports"
-                  checked={weeklyReports}
-                  onCheckedChange={setWeeklyReports}
-                />
+                <Switch id="weekly-reports" checked={weeklyReports} onCheckedChange={setWeeklyReports} />
               </div>
 
-              <div className="flex justify-end pt-4">
-                <Button onClick={handleSaveNotifications} disabled={loading} className="gap-2">
-                  <Save className="h-4 w-4" />
-                  {loading ? "Saving..." : "Save Preferences"}
+              <div className="flex justify-end pt-2 sm:pt-4">
+                <Button
+                  onClick={() => handleSave(() => toast.success("Preferences saved"))}
+                  disabled={loading}
+                  className="gap-2 text-xs sm:text-sm"
+                >
+                  <Save className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                  {loading ? "Saving..." : "Save"}
                 </Button>
               </div>
             </CardContent>
@@ -365,64 +326,49 @@ export default function SettingsPage() {
         </TabsContent>
 
         {/* Appearance Tab */}
-        <TabsContent value="appearance" className="space-y-4 mt-6">
+        <TabsContent value="appearance" className="space-y-3 sm:space-y-4 mt-4 sm:mt-6">
           <Card>
-            <CardHeader>
-              <CardTitle>Appearance Settings</CardTitle>
-              <CardDescription>
+            <CardHeader className="pb-3 sm:pb-4">
+              <CardTitle className="text-base sm:text-lg">Appearance Settings</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">
                 Customize the look and feel of your interface
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-4 sm:space-y-6">
               {/* Theme Selection */}
-              <div className="space-y-3">
-                <Label>Theme</Label>
-                <div className="grid grid-cols-3 gap-3">
-                  <button
-                    onClick={() => setTheme("light")}
-                    className={`flex flex-col items-center gap-2 p-4 rounded-lg border-2 transition-colors ${
-                      theme === "light"
-                        ? "border-primary bg-primary/5"
-                        : "border-border hover:border-primary/50"
-                    }`}
-                  >
-                    <Sun className="h-5 w-5" />
-                    <span className="text-sm font-medium">Light</span>
-                  </button>
-                  <button
-                    onClick={() => setTheme("dark")}
-                    className={`flex flex-col items-center gap-2 p-4 rounded-lg border-2 transition-colors ${
-                      theme === "dark"
-                        ? "border-primary bg-primary/5"
-                        : "border-border hover:border-primary/50"
-                    }`}
-                  >
-                    <Moon className="h-5 w-5" />
-                    <span className="text-sm font-medium">Dark</span>
-                  </button>
-                  <button
-                    onClick={() => setTheme("system")}
-                    className={`flex flex-col items-center gap-2 p-4 rounded-lg border-2 transition-colors ${
-                      theme === "system"
-                        ? "border-primary bg-primary/5"
-                        : "border-border hover:border-primary/50"
-                    }`}
-                  >
-                    <Monitor className="h-5 w-5" />
-                    <span className="text-sm font-medium">System</span>
-                  </button>
+              <div className="space-y-2 sm:space-y-3">
+                <Label className="text-xs sm:text-sm">Theme</Label>
+                <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                  {[
+                    { value: "light", icon: Sun, label: "Light" },
+                    { value: "dark", icon: Moon, label: "Dark" },
+                    { value: "system", icon: Monitor, label: "System" },
+                  ].map(({ value, icon: Icon, label }) => (
+                    <button
+                      key={value}
+                      onClick={() => setTheme(value)}
+                      className={`flex flex-col items-center gap-1 sm:gap-2 p-2 sm:p-4 rounded-lg border-2 transition-colors ${
+                        theme === value ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"
+                      }`}
+                    >
+                      <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
+                      <span className="text-xs sm:text-sm font-medium">{label}</span>
+                    </button>
+                  ))}
                 </div>
               </div>
 
               <Separator />
 
               {/* Language */}
-              <div className="space-y-2">
-                <Label htmlFor="language">Language</Label>
+              <div className="space-y-1.5 sm:space-y-2">
+                <Label htmlFor="language" className="text-xs sm:text-sm">
+                  Language
+                </Label>
                 <div className="relative">
-                  <Globe className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Globe className="absolute left-3 top-2 sm:top-2.5 h-4 w-4 text-muted-foreground" />
                   <Select value={language} onValueChange={setLanguage}>
-                    <SelectTrigger id="language" className="pl-9">
+                    <SelectTrigger id="language" className="pl-9 h-8 sm:h-10 text-sm">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -437,10 +383,12 @@ export default function SettingsPage() {
               </div>
 
               {/* Date Format */}
-              <div className="space-y-2">
-                <Label htmlFor="dateFormat">Date Format</Label>
+              <div className="space-y-1.5 sm:space-y-2">
+                <Label htmlFor="dateFormat" className="text-xs sm:text-sm">
+                  Date Format
+                </Label>
                 <Select value={dateFormat} onValueChange={setDateFormat}>
-                  <SelectTrigger id="dateFormat">
+                  <SelectTrigger id="dateFormat" className="h-8 sm:h-10 text-sm">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -451,10 +399,14 @@ export default function SettingsPage() {
                 </Select>
               </div>
 
-              <div className="flex justify-end pt-4">
-                <Button onClick={handleSaveAppearance} disabled={loading} className="gap-2">
-                  <Save className="h-4 w-4" />
-                  {loading ? "Saving..." : "Save Changes"}
+              <div className="flex justify-end pt-2 sm:pt-4">
+                <Button
+                  onClick={() => handleSave(() => toast.success("Settings saved"))}
+                  disabled={loading}
+                  className="gap-2 text-xs sm:text-sm"
+                >
+                  <Save className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                  {loading ? "Saving..." : "Save"}
                 </Button>
               </div>
             </CardContent>
@@ -462,33 +414,47 @@ export default function SettingsPage() {
         </TabsContent>
 
         {/* Security Tab */}
-        <TabsContent value="security" className="space-y-4 mt-6">
+        <TabsContent value="security" className="space-y-3 sm:space-y-4 mt-4 sm:mt-6">
           <Card>
-            <CardHeader>
-              <CardTitle>Security Settings</CardTitle>
-              <CardDescription>
-                Manage your account security and privacy
-              </CardDescription>
+            <CardHeader className="pb-3 sm:pb-4">
+              <CardTitle className="text-base sm:text-lg">Security Settings</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">Manage your account security and privacy</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-3 sm:space-y-6">
               {/* Change Password */}
-              <div className="space-y-4">
-                <h3 className="text-sm font-semibold flex items-center gap-2">
+              <div className="space-y-2 sm:space-y-4">
+                <h3 className="text-xs sm:text-sm font-semibold flex items-center gap-2">
                   <Lock className="h-4 w-4" />
                   Change Password
                 </h3>
-                <div className="space-y-3">
-                  <div className="space-y-2">
-                    <Label htmlFor="current-password">Current Password</Label>
-                    <Input id="current-password" type="password" placeholder="••••••••" />
+                <div className="space-y-2 sm:space-y-3">
+                  <div className="space-y-1 sm:space-y-2">
+                    <Label htmlFor="current-password" className="text-xs sm:text-sm">
+                      Current Password
+                    </Label>
+                    <Input
+                      id="current-password"
+                      type="password"
+                      placeholder="••••••••"
+                      className="h-8 sm:h-10 text-sm"
+                    />
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="new-password">New Password</Label>
-                    <Input id="new-password" type="password" placeholder="••••••••" />
+                  <div className="space-y-1 sm:space-y-2">
+                    <Label htmlFor="new-password" className="text-xs sm:text-sm">
+                      New Password
+                    </Label>
+                    <Input id="new-password" type="password" placeholder="••••••••" className="h-8 sm:h-10 text-sm" />
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="confirm-password">Confirm New Password</Label>
-                    <Input id="confirm-password" type="password" placeholder="••••••••" />
+                  <div className="space-y-1 sm:space-y-2">
+                    <Label htmlFor="confirm-password" className="text-xs sm:text-sm">
+                      Confirm New Password
+                    </Label>
+                    <Input
+                      id="confirm-password"
+                      type="password"
+                      placeholder="••••••••"
+                      className="h-8 sm:h-10 text-sm"
+                    />
                   </div>
                 </div>
               </div>
@@ -496,96 +462,47 @@ export default function SettingsPage() {
               <Separator />
 
               {/* Two-Factor Authentication */}
-              <div className="flex items-center justify-between">
-                <div className="space-y-1">
+              <div className="flex items-center justify-between gap-2">
+                <div className="space-y-0.5 flex-1">
                   <div className="flex items-center gap-2">
-                    <Shield className="h-4 w-4 text-muted-foreground" />
-                    <Label htmlFor="2fa" className="font-medium">
+                    <Shield className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                    <Label htmlFor="2fa" className="font-medium text-xs sm:text-sm">
                       Two-Factor Authentication
                     </Label>
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    Add an extra layer of security to your account
-                  </p>
+                  <p className="text-xs text-muted-foreground hidden sm:block">Add an extra layer of security</p>
                 </div>
-                <Switch
-                  id="2fa"
-                  checked={twoFactorAuth}
-                  onCheckedChange={setTwoFactorAuth}
-                />
+                <Switch id="2fa" checked={twoFactorAuth} onCheckedChange={setTwoFactorAuth} />
               </div>
 
               <Separator />
 
               {/* Session Timeout */}
-              <div className="space-y-2">
-                <Label htmlFor="session-timeout">Session Timeout</Label>
+              <div className="space-y-1.5 sm:space-y-2">
+                <Label htmlFor="sessionTimeout" className="text-xs sm:text-sm">
+                  Session Timeout (minutes)
+                </Label>
                 <Select value={sessionTimeout} onValueChange={setSessionTimeout}>
-                  <SelectTrigger id="session-timeout">
+                  <SelectTrigger id="sessionTimeout" className="h-8 sm:h-10 text-sm">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="15">15 minutes</SelectItem>
                     <SelectItem value="30">30 minutes</SelectItem>
                     <SelectItem value="60">1 hour</SelectItem>
-                    <SelectItem value="240">4 hours</SelectItem>
-                    <SelectItem value="never">Never</SelectItem>
+                    <SelectItem value="120">2 hours</SelectItem>
                   </SelectContent>
                 </Select>
-                <p className="text-xs text-muted-foreground">
-                  Automatically log out after period of inactivity
-                </p>
               </div>
 
-              <div className="flex justify-end pt-4">
-                <Button onClick={handleSaveSecurity} disabled={loading} className="gap-2">
-                  <Save className="h-4 w-4" />
-                  {loading ? "Saving..." : "Update Security"}
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Active Sessions */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Active Sessions</CardTitle>
-              <CardDescription>
-                Manage devices where you're currently logged in
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-start justify-between p-3 border rounded-lg">
-                <div className="flex items-start gap-3">
-                  <div className="p-2 bg-primary/10 rounded-lg">
-                    <Monitor className="h-4 w-4 text-primary" />
-                  </div>
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <p className="text-sm font-medium">Chrome on Windows</p>
-                      <Badge variant="secondary" className="text-xs">Current</Badge>
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      Casablanca, Morocco • Last active now
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-start justify-between p-3 border rounded-lg">
-                <div className="flex items-start gap-3">
-                  <div className="p-2 bg-muted rounded-lg">
-                    <Monitor className="h-4 w-4 text-muted-foreground" />
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium">Safari on iPhone</p>
-                    <p className="text-xs text-muted-foreground">
-                      Casablanca, Morocco • 2 hours ago
-                    </p>
-                  </div>
-                </div>
-                <Button variant="ghost" size="sm" className="text-destructive">
-                  Revoke
+              <div className="flex justify-end pt-2 sm:pt-4">
+                <Button
+                  onClick={() => handleSave(() => toast.success("Security settings updated"))}
+                  disabled={loading}
+                  className="gap-2 text-xs sm:text-sm"
+                >
+                  <Save className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                  {loading ? "Saving..." : "Save"}
                 </Button>
               </div>
             </CardContent>
