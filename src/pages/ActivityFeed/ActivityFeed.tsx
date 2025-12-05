@@ -15,6 +15,7 @@ type Activity = {
   user?: {
     _id: string;
     first_name: string;
+    email: string;
     avatarColor: string;
     profile_image?: string;
     role: string;
@@ -275,6 +276,7 @@ export default function ActivityFeed() {
                             <span className="font-medium">
                               {activity.user?.first_name || "Unknown User"}
                             </span>
+                            <div className="text-xs text-muted-foreground">{activity.user?.email}</div>
                           </div>
                         </td>
 
