@@ -121,7 +121,7 @@ export default function UsersPage() {
                     <td className="px-4 py-3 flex items-center gap-2">
   <Avatar className="w-8 h-8">
     <AvatarImage 
-      src={u.profile_image || undefined}
+      src={`${API_URL}${u.profile_image}`}
       alt={u.first_name}
     />
 <AvatarFallback style={{ backgroundColor: colorMap[u.avatarColor], color: "white" }}>
