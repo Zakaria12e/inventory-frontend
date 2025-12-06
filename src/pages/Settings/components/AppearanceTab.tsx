@@ -5,7 +5,7 @@ import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/com
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
-import { Sun, Moon, Monitor, Globe, Save } from "lucide-react"
+import { Sun, Moon, Monitor, Save } from "lucide-react"
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select"
 import { toast } from "sonner"
 

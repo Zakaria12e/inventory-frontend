@@ -3,7 +3,6 @@
 import { useState } from "react"
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
-import { Separator } from "@/components/ui/separator"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Mail, Bell, AlertCircle, Database, Save } from "lucide-react"

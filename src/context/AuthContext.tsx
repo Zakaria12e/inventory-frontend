@@ -9,12 +9,16 @@ interface User {
   email: string;
   role: string;
   avatarColor: string;
-  profile_image?: string;
+  profile_image: string;
+  phone?: string;
+  bio?: string;
 }
+
 
 interface AuthContextType {
   user: User | null;
   setUser: (user: User | null) => void;
+  updateUser: (updatedFields: Partial<User>) => void;
   loading: boolean;
   login: (email: string, password: string, rememberMe?: boolean) => Promise<void>;
   logout: () => Promise<void>;
@@ -25,13 +29,14 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-
   const API_URL = import.meta.env.VITE_API_URL;
 
-  // Utility to get token from localStorage
   const getToken = () => localStorage.getItem("token");
 
-  // Fetch current user
+  const updateUser = (updatedFields: Partial<User>) => {
+    setUser((prev) => (prev ? { ...prev, ...updatedFields } : prev));
+  };
+
   const fetchUser = async () => {
     const token = getToken();
     if (!token) {
@@ -39,12 +44,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setLoading(false);
       return;
     }
-
     try {
       const res = await fetch(`${API_URL}/auth/me`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
       if (res.ok && data.success) {
@@ -59,7 +61,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  // Fetch user on mount
   useEffect(() => {
     fetchUser();
   }, []);
@@ -72,14 +73,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password, rememberMe }),
       });
-
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Login failed");
 
-      // Save token in localStorage
       localStorage.setItem("token", data.token);
-
-      // Fetch current user
       await fetchUser();
     } finally {
       setLoading(false);
@@ -92,7 +89,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, setUser, updateUser, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

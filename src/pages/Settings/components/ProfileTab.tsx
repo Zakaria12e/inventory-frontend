@@ -1,88 +1,92 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Separator } from "@/components/ui/separator"
-import { Camera, Save } from "lucide-react"
-import { toast } from "sonner"
+import { useState, useEffect } from "react";
+import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Separator } from "@/components/ui/separator";
+import { Camera, Save } from "lucide-react";
+import { toast } from "sonner";
+import { useAuth } from "@/context/AuthContext";
 
 export default function ProfileTab() {
-  const [loading, setLoading] = useState(false)
-  const [firstName, setFirstName] = useState("")
-  const [lastName, setLastName] = useState("")
-  const [email, setEmail] = useState("")
-  const [phone, setPhone] = useState("")
-  const [bio, setBio] = useState("")
-  const [avatar, setAvatar] = useState<File | null>(null)
-  const [avatarPreview, setAvatarPreview] = useState<string>("")
-  const API_URL = import.meta.env.VITE_API_URL
+  const { user, updateUser } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [bio, setBio] = useState("");
+  const [avatar, setAvatar] = useState<File | null>(null);
 
-  // Fetch user profile on mount
+  const API_URL = import.meta.env.VITE_API_URL;
+
+  // 1. useEffect simplified: only initializes text fields.
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const res = await fetch(`${API_URL}/users/profile`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        })
-        const data = await res.json()
-        if (res.ok) {
-          setFirstName(data.first_name || "")
-          setLastName(data.last_name || "")
-          setEmail(data.email || "")
-          setPhone(data.phone || "")
-          setBio(data.bio || "")
-          setAvatarPreview(
-  data.profile_image
-    ? `${API_URL}${data.profile_image}`
-    : ""
-)
-
-        }
-      } catch (error) {
-        console.log(error)
-        toast.error("Failed to load profile")
-      }
+    if (user) {
+      setFirstName(user.first_name);
+      setLastName(user.last_name);
+      setEmail(user.email);
+      setPhone(user.phone || "");
+      setBio(user.bio || "");
+      // Removed setAvatarPreview
     }
-    fetchProfile()
-  }, [])
+  }, [user]);
 
-  // Handle profile save
+  // 2. Dynamic Source Calculation
+  // This ensures the displayed image always reflects the current state (new file or saved context path).
+  const currentAvatarSource = avatar 
+    ? URL.createObjectURL(avatar)
+    : user?.profile_image 
+    ? `${API_URL}${user.profile_image}`
+    : ""; 
+
   const handleSave = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
-      const formData = new FormData()
-      formData.append("firstName", firstName)
-      formData.append("lastName", lastName)
-      formData.append("email", email)
-      formData.append("phone", phone)
-      formData.append("bio", bio)
-      if (avatar) formData.append("avatar", avatar)
+      const formData = new FormData();
+      formData.append("firstName", firstName);
+      formData.append("lastName", lastName);
+      formData.append("email", email);
+      formData.append("phone", phone);
+      formData.append("bio", bio);
+      if (avatar) formData.append("avatar", avatar);
 
-      const response = await fetch(`${API_URL}/users/profile`, {
+      const res = await fetch(`${API_URL}/users/profile`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: formData,
-      })
+      });
 
-      const data = await response.json()
-      if (!response.ok) throw new Error(data.message || "Error updating profile")
-      toast.success("Profile updated")
-      // Optionally update avatar preview if backend returns new URL
-      if (data.profile_image) setAvatarPreview(data.profile_image)
-    } catch (error: any) {
-      toast.error(error.message || "Failed to update profile")
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Failed to update profile");
+
+      toast.success("Profile updated successfully");
+
+      // Update the user in AuthContext with new fields, including the profile_image path.
+      updateUser({
+        first_name: firstName,
+        last_name: lastName,
+        email,
+        phone,
+        bio,
+        profile_image: data.profile_image || user?.profile_image,
+      });
+      
+      // Clear the temporary file state after successful upload
+      if (data.profile_image) {
+          setAvatar(null); 
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Failed to update profile");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="space-y-3 sm:space-y-4 mt-4 sm:mt-6">
@@ -97,11 +101,10 @@ export default function ProfileTab() {
           {/* Avatar */}
           <div className="flex items-start sm:items-center gap-3 sm:gap-4">
             <Avatar className="h-16 sm:h-20 w-16 sm:w-20 flex-shrink-0">
-              <AvatarImage src={avatarPreview} />
-              <AvatarFallback>?</AvatarFallback>
+              {/* Use the dynamically calculated source */}
+              <AvatarImage src={currentAvatarSource} /> 
+              <AvatarFallback>{`${user?.first_name[0] || ""}${user?.last_name[0] || ""}`.toUpperCase()}</AvatarFallback>
             </Avatar>
-
-            {/* Hidden input for file */}
             <input
               type="file"
               id="avatarInput"
@@ -109,12 +112,11 @@ export default function ProfileTab() {
               className="hidden"
               onChange={(e) => {
                 if (e.target.files && e.target.files[0]) {
-                  setAvatar(e.target.files[0])
-                  setAvatarPreview(URL.createObjectURL(e.target.files[0]))
+                  setAvatar(e.target.files[0]);
+                  // Preview is handled automatically by currentAvatarSource
                 }
               }}
             />
-
             <div className="space-y-2 flex-1">
               <div className="flex flex-col sm:flex-row gap-2">
                 <Button
@@ -132,8 +134,10 @@ export default function ProfileTab() {
                   variant="ghost"
                   className="text-destructive text-xs sm:text-sm"
                   onClick={() => {
-                    setAvatar(null)
-                    setAvatarPreview("")
+                    setAvatar(null);
+                    // 3. Update AuthContext immediately to clear the displayed image
+                    updateUser({ profile_image: "" }); 
+                    toast.info("Image cleared. Click 'Save Changes' to confirm.");
                   }}
                 >
                   Remove
@@ -178,8 +182,8 @@ export default function ProfileTab() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="h-8 sm:h-10 text-sm"
                 placeholder="john@example.com"
+                className="h-8 sm:h-10 text-sm"
               />
             </div>
             <div className="space-y-1.5 sm:space-y-2">
@@ -189,8 +193,8 @@ export default function ProfileTab() {
                 type="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                className="h-8 sm:h-10 text-sm"
                 placeholder="+1 234 567 8900"
+                className="h-8 sm:h-10 text-sm"
               />
             </div>
           </div>
@@ -202,8 +206,8 @@ export default function ProfileTab() {
               id="bio"
               value={bio}
               onChange={(e) => setBio(e.target.value)}
-              className="h-8 sm:h-10 text-sm"
               placeholder="Tell us about yourself"
+              className="h-8 sm:h-10 text-sm"
             />
           </div>
 
@@ -221,5 +225,5 @@ export default function ProfileTab() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
