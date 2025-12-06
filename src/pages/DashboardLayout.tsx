@@ -188,12 +188,12 @@ export default function DashboardLayout({ children,}: { children: React.ReactNod
                 <Link to="/dashboard">
                   <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
                     <img
-                      src="/logo-black.png"
+                      src="https://eurohinca.com/wp-content/uploads/2024/01/favicon.png"
                       alt="Logo"
                       className="block dark:hidden"
                     />
                     <img
-                      src="/logo-black.png"
+                      src="https://res.cloudinary.com/dectxiuco/image/upload/v1765063045/euro-darkv-removebg-preview_qq2c0i.png"
                       alt="Logo Dark"
                       className="hidden dark:block"
                     />
