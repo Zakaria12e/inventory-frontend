@@ -266,7 +266,7 @@ export default function ActivityFeed() {
                           <div className="flex items-center gap-3">
                             <Avatar className="w-10 h-10">
                               <AvatarImage
-                                src={`${API_URL}${activity.user?.profile_image}`}
+                                src={`${activity.user?.profile_image}`}
                                 alt={activity.user?.first_name}
                               />
                               <AvatarFallback

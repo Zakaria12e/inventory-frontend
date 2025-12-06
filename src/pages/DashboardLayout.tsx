@@ -343,7 +343,7 @@ export default function DashboardLayout({ children,}: { children: React.ReactNod
                   >
                     <Avatar className="h-8 w-8 rounded-lg">
                       <AvatarImage
-                        src={`${API_URL}${user.profile_image}`}
+                        src={`${user.profile_image}`}
                         alt={user.first_name}
                       />
 <AvatarFallback style={{ backgroundColor: colorMap[user.avatarColor], color: "white" }} className="rounded-lg">

@@ -23,7 +23,7 @@ export default function ProfileTab() {
 
   const API_URL = import.meta.env.VITE_API_URL;
 
-  // 1. useEffect simplified: only initializes text fields.
+  // Initialize form fields
   useEffect(() => {
     if (user) {
       setFirstName(user.first_name);
@@ -31,17 +31,13 @@ export default function ProfileTab() {
       setEmail(user.email);
       setPhone(user.phone || "");
       setBio(user.bio || "");
-      // Removed setAvatarPreview
     }
   }, [user]);
 
-  // 2. Dynamic Source Calculation
-  // This ensures the displayed image always reflects the current state (new file or saved context path).
-  const currentAvatarSource = avatar 
+  // Calculate current avatar source (preview or saved)
+  const currentAvatarSource = avatar
     ? URL.createObjectURL(avatar)
-    : user?.profile_image 
-    ? `${API_URL}${user.profile_image}`
-    : ""; 
+    : user?.profile_image || "";
 
   const handleSave = async () => {
     setLoading(true);
@@ -67,20 +63,18 @@ export default function ProfileTab() {
 
       toast.success("Profile updated successfully");
 
-      // Update the user in AuthContext with new fields, including the profile_image path.
+      // Update AuthContext
       updateUser({
         first_name: firstName,
         last_name: lastName,
         email,
         phone,
         bio,
-        profile_image: data.profile_image || user?.profile_image,
+        profile_image: data.user.profile_image || user?.profile_image,
       });
-      
-      // Clear the temporary file state after successful upload
-      if (data.profile_image) {
-          setAvatar(null); 
-      }
+
+      // Clear temporary avatar file
+      if (data.user.profile_image) setAvatar(null);
     } catch (err: any) {
       toast.error(err.message || "Failed to update profile");
     } finally {
@@ -98,12 +92,14 @@ export default function ProfileTab() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4 sm:space-y-6">
-          {/* Avatar */}
+
+          {/* Avatar Section */}
           <div className="flex items-start sm:items-center gap-3 sm:gap-4">
             <Avatar className="h-16 sm:h-20 w-16 sm:w-20 flex-shrink-0">
-              {/* Use the dynamically calculated source */}
-              <AvatarImage src={currentAvatarSource} /> 
-              <AvatarFallback>{`${user?.first_name[0] || ""}${user?.last_name[0] || ""}`.toUpperCase()}</AvatarFallback>
+              <AvatarImage src={currentAvatarSource} />
+              <AvatarFallback>
+                {`${user?.first_name?.[0] || ""}${user?.last_name?.[0] || ""}`.toUpperCase()}
+              </AvatarFallback>
             </Avatar>
             <input
               type="file"
@@ -111,10 +107,7 @@ export default function ProfileTab() {
               accept="image/*"
               className="hidden"
               onChange={(e) => {
-                if (e.target.files && e.target.files[0]) {
-                  setAvatar(e.target.files[0]);
-                  // Preview is handled automatically by currentAvatarSource
-                }
+                if (e.target.files && e.target.files[0]) setAvatar(e.target.files[0]);
               }}
             />
             <div className="space-y-2 flex-1">
@@ -135,8 +128,7 @@ export default function ProfileTab() {
                   className="text-destructive text-xs sm:text-sm"
                   onClick={() => {
                     setAvatar(null);
-                    // 3. Update AuthContext immediately to clear the displayed image
-                    updateUser({ profile_image: "" }); 
+                    updateUser({ profile_image: "" });
                     toast.info("Image cleared. Click 'Save Changes' to confirm.");
                   }}
                 >
@@ -222,6 +214,7 @@ export default function ProfileTab() {
               {loading ? "Saving..." : "Save Changes"}
             </Button>
           </div>
+
         </CardContent>
       </Card>
     </div>
