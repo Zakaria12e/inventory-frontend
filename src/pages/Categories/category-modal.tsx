@@ -6,37 +6,44 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { IconSelector } from "./icon-selector"
 
 interface CategoryModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  onSave: (name: string, description: string) => void
-  initialData?: { name: string; description: string }
+  onSave: (data: { name: string; description: string; icon: string; iconColor: string }) => void
+  initialData?: { name: string; description: string; icon?: string; iconColor?: string }
   isEditing?: boolean
 }
 
 export function CategoryModal({ open, onOpenChange, onSave, initialData, isEditing }: CategoryModalProps) {
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
+  const [icon, setIcon] = useState("Package")
+  const [iconColor, setIconColor] = useState("blue")
 
   useEffect(() => {
     if (initialData) {
       setName(initialData.name)
       setDescription(initialData.description)
+      setIcon(initialData.icon || "Package")
+      setIconColor(initialData.iconColor || "blue")
     } else {
       setName("")
       setDescription("")
+      setIcon("Package")
+      setIconColor("blue")
     }
   }, [initialData, open])
 
   const handleSave = () => {
     if (!name.trim()) return
-    onSave(name, description)
+    onSave({ name, description, icon, iconColor })
   }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle>{isEditing ? "Edit Category" : "Create Category"}</DialogTitle>
           <DialogDescription>
@@ -63,6 +70,7 @@ export function CategoryModal({ open, onOpenChange, onSave, initialData, isEditi
               rows={3}
             />
           </div>
+          <IconSelector value={icon} onIconChange={setIcon} color={iconColor} onColorChange={setIconColor} />
         </div>
         <div className="flex gap-3 justify-end">
           <Button variant="outline" onClick={() => onOpenChange(false)}>
