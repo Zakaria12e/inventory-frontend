@@ -82,5 +82,29 @@
     "cancel": "Annuler",
     "add": "Ajouter",
     "update": "Mettre à jour"
+  },
+  "categoriesPage": {
+    "title": "Catégories",
+    "subtitle": "Organisez et gérez vos catégories d'inventaire",
+    "searchPlaceholder": "Rechercher des catégories...",
+    "addButton": "Ajouter une catégorie",
+    "noCategories": "Aucune catégorie trouvée",
+    "noResults": "Essayez d'ajuster vos termes de recherche",
+    "getStarted": "Commencez par créer votre première catégorie",
+    "table": { "name": "Nom", "description": "Description", "items": "Articles", "actions": "Actions" },
+    "edit": "Modifier la catégorie",
+    "delete": "Supprimer la catégorie",
+    "cancel": "Annuler",
+    "deleting": "Suppression...",
+    "deleteConfirm": "Êtes-vous sûr de vouloir supprimer \"{{name}}\" ? Cette action est irréversible.",
+    "pagination": { "showing": "Affichage de {{start}} à {{end}} sur {{total}}" },
+    "fetchError": "Échec du chargement des catégories",
+    "addSuccess": "Catégorie \"{{name}}\" créée avec succès",
+    "addError": "Échec de l'ajout de la catégorie",
+    "updateSuccess": "Catégorie \"{{name}}\" mise à jour avec succès",
+    "updateError": "Échec de la mise à jour de la catégorie",
+    "deleteSuccess": "Catégorie \"{{name}}\" supprimée avec succès",
+    "deleteError": "Échec de la suppression de la catégorie",
+    "deleteErrorWithItems": "Impossible de supprimer une catégorie contenant {{count}} article(s). Supprimez d'abord les articles."
   }
 }

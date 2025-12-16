@@ -82,5 +82,29 @@
     "cancel": "Cancel",
     "add": "Add Item",
     "update": "Update Item"
+  },
+  "categoriesPage": {
+    "title": "Categories",
+    "subtitle": "Organize and manage your inventory categories",
+    "searchPlaceholder": "Search categories...",
+    "addButton": "Add Category",
+    "noCategories": "No categories found",
+    "noResults": "Try adjusting your search terms",
+    "getStarted": "Get started by creating your first category",
+    "table": { "name": "Name", "description": "Description", "items": "Items", "actions": "Actions" },
+    "edit": "Edit category",
+    "delete": "Delete category",
+    "cancel": "Cancel",
+    "deleting": "Deleting...",
+    "deleteConfirm": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone.",
+    "pagination": { "showing": "Showing {{start}}-{{end}} of {{total}}" },
+    "fetchError": "Failed to load categories",
+    "addSuccess": "Category \"{{name}}\" created successfully",
+    "addError": "Failed to add category",
+    "updateSuccess": "Category \"{{name}}\" updated successfully",
+    "updateError": "Failed to update category",
+    "deleteSuccess": "Category \"{{name}}\" deleted successfully",
+    "deleteError": "Failed to delete category",
+    "deleteErrorWithItems": "Cannot delete category with {{count}} item(s). Remove items first."
   }
 }

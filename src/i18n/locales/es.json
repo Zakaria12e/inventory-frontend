@@ -82,6 +82,30 @@
     "cancel": "Cancelar",
     "add": "Agregar artículo",
     "update": "Actualizar artículo"
+  },
+  "categoriesPage": {
+    "title": "Categorías",
+    "subtitle": "Organiza y gestiona las categorías de tu inventario",
+    "searchPlaceholder": "Buscar categorías...",
+    "addButton": "Agregar categoría",
+    "noCategories": "No se encontraron categorías",
+    "noResults": "Intenta ajustar tus términos de búsqueda",
+    "getStarted": "Comienza creando tu primera categoría",
+    "table": { "name": "Nombre", "description": "Descripción", "items": "Artículos", "actions": "Acciones" },
+    "edit": "Editar categoría",
+    "delete": "Eliminar categoría",
+    "cancel": "Cancelar",
+    "deleting": "Eliminando...",
+    "deleteConfirm": "¿Estás seguro de que deseas eliminar \"{{name}}\"? Esta acción no se puede deshacer.",
+    "pagination": { "showing": "Mostrando {{start}}-{{end}} de {{total}}" },
+    "fetchError": "Error al cargar categorías",
+    "addSuccess": "Categoría \"{{name}}\" creada exitosamente",
+    "addError": "Error al agregar la categoría",
+    "updateSuccess": "Categoría \"{{name}}\" actualizada exitosamente",
+    "updateError": "Error al actualizar la categoría",
+    "deleteSuccess": "Categoría \"{{name}}\" eliminada exitosamente",
+    "deleteError": "Error al eliminar la categoría",
+    "deleteErrorWithItems": "No se puede eliminar una categoría con {{count}} artículo(s). Elimina primero los artículos."
   }
 
 }

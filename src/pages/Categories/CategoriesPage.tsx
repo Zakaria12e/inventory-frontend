@@ -1,4 +1,4 @@
-// "use client"
+"use client"
 import { useEffect, useState } from "react"
 import { Trash2, Edit2, Plus, Search, FolderOpen, ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -19,6 +19,7 @@ import { toast } from "sonner"
 import { CategoryModal } from "./category-modal"
 import { getIconComponent } from "@/lib/icon-utils"
 import { useAuth } from "@/context/AuthContext"
+import { useTranslation } from "react-i18next"
 
 interface Category {
   _id: number
@@ -37,6 +38,7 @@ interface Item {
 }
 
 export default function CategoriesPage() {
+  const { t } = useTranslation()
   const { user } = useAuth()
   const isEmploye = user?.role === "employe"
 
@@ -49,7 +51,6 @@ export default function CategoriesPage() {
   const [loading, setLoading] = useState(true)
   const [deleting, setDeleting] = useState(false)
 
-  // Pagination states
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage] = useState(10)
 
@@ -65,15 +66,13 @@ export default function CategoriesPage() {
     try {
       setLoading(true)
       const res = await fetch(`${API_URL}/categories`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       })
       if (!res.ok) throw new Error("Failed to fetch")
       const data = await res.json()
       setCategories(data)
-    } catch (err) {
-      toast.error("Failed to load categories")
+    } catch {
+      toast.error(t("categoriesPage.fetchError"))
     } finally {
       setLoading(false)
     }
@@ -81,15 +80,11 @@ export default function CategoriesPage() {
 
   const fetchItems = async () => {
     try {
-      const res = await fetch(`${API_URL}/items`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      const res = await fetch(`${API_URL}/items`, { headers: { Authorization: `Bearer ${token}` } })
       if (!res.ok) throw new Error("Failed to fetch")
       const data = await res.json()
       setItems(data)
-    } catch (err) {
+    } catch {
       console.error("Failed to load items")
     }
   }
@@ -100,34 +95,27 @@ export default function CategoriesPage() {
       cat.description.toLowerCase().includes(searchTerm.toLowerCase()),
   )
 
-  // Pagination logic
   const totalPages = Math.ceil(filteredCategories.length / itemsPerPage)
   const startIndex = (currentPage - 1) * itemsPerPage
   const endIndex = startIndex + itemsPerPage
   const paginatedCategories = filteredCategories.slice(startIndex, endIndex)
 
-  // Reset to page 1 when search changes
-  useEffect(() => {
-    setCurrentPage(1)
-  }, [searchTerm])
+  useEffect(() => { setCurrentPage(1) }, [searchTerm])
 
   const handleAddCategory = async (data: { name: string; description: string; icon: string; iconColor: string }) => {
     try {
       const res = await fetch(`${API_URL}/categories`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify(data),
       })
       if (!res.ok) throw new Error("Failed to add")
       const newCategory = await res.json()
       setCategories([...categories, newCategory])
       setShowModal(false)
-      toast.success(`Category "${data.name}" created successfully`)
+      toast.success(t("categoriesPage.addSuccess", { name: data.name }))
     } catch {
-      toast.error("Failed to add category")
+      toast.error(t("categoriesPage.addError"))
     }
   }
 
@@ -136,10 +124,7 @@ export default function CategoriesPage() {
     try {
       const res = await fetch(`${API_URL}/categories/${editingCategory._id}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify(data),
       })
       if (!res.ok) throw new Error("Failed to update")
@@ -147,9 +132,9 @@ export default function CategoriesPage() {
       setCategories(categories.map((cat) => (cat._id === updatedCategory._id ? updatedCategory : cat)))
       setEditingCategory(null)
       setShowModal(false)
-      toast.success(`Category "${data.name}" updated successfully`)
+      toast.success(t("categoriesPage.updateSuccess", { name: data.name }))
     } catch {
-      toast.error("Failed to update category")
+      toast.error(t("categoriesPage.updateError"))
     }
   }
 
@@ -158,24 +143,19 @@ export default function CategoriesPage() {
     const categoryItems = items.filter((item) => item.categoryId === id)
 
     if (categoryItems.length > 0) {
-      toast.error(`Cannot delete category with ${categoryItems.length} item(s). Remove items first.`)
+      toast.error(t("categoriesPage.deleteErrorWithItems", { count: categoryItems.length }))
       return
     }
 
     try {
       setDeleting(true)
-      const res = await fetch(`${API_URL}/categories/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      const res = await fetch(`${API_URL}/categories/${id}`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } })
       if (!res.ok) throw new Error("Failed to delete")
       setCategories(categories.filter((cat) => cat._id !== id))
       setDeletingId(null)
-      toast.success(`Category "${categoryToDelete?.name}" deleted successfully`)
+      toast.success(t("categoriesPage.deleteSuccess", { name: categoryToDelete?.name }))
     } catch {
-      toast.error("Failed to delete category")
+      toast.error(t("categoriesPage.deleteError"))
     } finally {
       setDeleting(false)
     }
@@ -183,9 +163,7 @@ export default function CategoriesPage() {
 
   const handleModalClose = (open: boolean) => {
     setShowModal(open)
-    if (!open) {
-      setEditingCategory(null)
-    }
+    if (!open) setEditingCategory(null)
   }
 
   const getColorClass = (color: string) => {
@@ -219,220 +197,167 @@ export default function CategoriesPage() {
             <FolderOpen className="h-5 w-5 text-primary" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Categories</h1>
-            <p className="text-sm text-muted-foreground">Organize and manage your inventory categories</p>
+            <h1 className="text-3xl font-bold tracking-tight">{t("categoriesPage.title")}</h1>
+            <p className="text-sm text-muted-foreground">{t("categoriesPage.subtitle")}</p>
           </div>
         </div>
       </div>
 
-     
-          
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search categories..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 h-10 bg-background"
-              />
-            </div>
-            {!isEmploye && (
-              <Button
-                onClick={() => {
-                  setEditingCategory(null)
-                  setShowModal(true)
-                }}
-                size="sm"
-                className="gap-2 whitespace-nowrap"
-              >
-                <Plus className="w-4 h-4" />
-                Add Category
-              </Button>
-            )}
-          </div>
-          {/* End of Search & Add Button block */}
+      {/* Search & Add */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
+        <div className="flex-1 relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Input
+            placeholder={t("categoriesPage.searchPlaceholder")}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10 h-10 bg-background"
+          />
+        </div>
+        {!isEmploye && (
+          <Button
+            onClick={() => { setEditingCategory(null); setShowModal(true) }}
+            size="sm"
+            className="gap-2 whitespace-nowrap"
+          >
+            <Plus className="w-4 h-4" />
+            {t("categoriesPage.addButton")}
+          </Button>
+        )}
+      </div>
 
-          {loading ? (
-            <div className="flex items-center justify-center h-64">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-            </div>
-          ) : filteredCategories.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-16 text-center">
-              <div className="rounded-full bg-muted p-4 mb-4">
-                <FolderOpen className="h-8 w-8 text-muted-foreground" />
-              </div>
-              <h3 className="font-semibold text-lg mb-2">No categories found</h3>
-              <p className="text-sm text-muted-foreground mb-6 max-w-sm">
-                {searchTerm ? "Try adjusting your search terms" : "Get started by creating your first category"}
-              </p>
-              {!isEmploye && !searchTerm && (
-                <Button
-                  onClick={() => {
-                    setEditingCategory(null)
-                    setShowModal(true)
-                  }}
-                  size="sm"
-                  className="gap-2"
-                >
-                  <Plus className="w-4 h-4" />
-                  Create Category
-                </Button>
-              )}
-            </div>
-          ) : (
-            <>
-          
-              <div className="overflow-x-auto rounded-md border"> 
-                <Table className="w-full text-sm">
-                  <TableHeader className="bg-muted text-xs text-muted-foreground sm:text-sm">
-                    <TableRow>
-                      <TableHead className="px-6 py-3 text-left">Name</TableHead>
-                      <TableHead className="px-4 py-3 text-left hidden md:table-cell">Description</TableHead>
-                      <TableHead className="px-4 py-3 text-left">Items</TableHead>
+      {/* Table / Empty state */}
+      {loading ? (
+        <div className="flex items-center justify-center h-64">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        </div>
+      ) : filteredCategories.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-16 text-center">
+          <div className="rounded-full bg-muted p-4 mb-4">
+            <FolderOpen className="h-8 w-8 text-muted-foreground" />
+          </div>
+          <h3 className="font-semibold text-lg mb-2">{t("categoriesPage.noCategories")}</h3>
+          <p className="text-sm text-muted-foreground mb-6 max-w-sm">
+            {searchTerm ? t("categoriesPage.noResults") : t("categoriesPage.getStarted")}
+          </p>
+          {!isEmploye && !searchTerm && (
+            <Button onClick={() => { setEditingCategory(null); setShowModal(true) }} size="sm" className="gap-2">
+              <Plus className="w-4 h-4" />
+              {t("categoriesPage.addButton")}
+            </Button>
+          )}
+        </div>
+      ) : (
+        <>
+          <div className="overflow-x-auto rounded-md border">
+            <Table className="w-full text-sm">
+              <TableHeader className="bg-muted text-xs text-muted-foreground sm:text-sm">
+                <TableRow>
+                  <TableHead className="px-6 py-3 text-left">{t("categoriesPage.table.name")}</TableHead>
+                  <TableHead className="px-4 py-3 text-left hidden md:table-cell">{t("categoriesPage.table.description")}</TableHead>
+                  <TableHead className="px-4 py-3 text-left">{t("categoriesPage.table.items")}</TableHead>
+                  {!isEmploye && (
+                    <TableHead className="px-10 py-3 text-right">{t("categoriesPage.table.actions")}</TableHead>
+                  )}
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {paginatedCategories.map((category) => {
+                  const IconComponent = getIconComponent(category.icon || "Package")
+                  const colorClass = getColorClass(category.iconColor || "blue")
+                  return (
+                    <TableRow key={category._id} className="border-b">
+                      <TableCell className="px-6 py-3 flex items-center gap-2">
+                        <div className="flex items-center gap-3">
+                          <div className={`w-8 h-8 rounded-md ${colorClass} flex items-center justify-center flex-shrink-0`}>
+                            {IconComponent && <IconComponent className="w-4 h-4" />}
+                          </div>
+                          <div className="font-medium text-foreground">{category.name}</div>
+                        </div>
+                      </TableCell>
+                      <TableCell className="px-4 py-3 flex items-center gap-2 hidden md:table-cell">
+                        <div className="text-sm text-muted-foreground line-clamp-2">{category.description || "—"}</div>
+                      </TableCell>
+                      <TableCell className="px-4 py-3 flex items-center gap-2 text-center">
+                        <Badge variant="secondary" className="font-medium text-xs">{category.itemsCount}</Badge>
+                      </TableCell>
                       {!isEmploye && (
-                        <TableHead className="px-10 py-3 text-right">Actions</TableHead>
+                        <TableCell className="px-6 py-3 text-right">
+                          <div className="flex justify-end gap-1">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                              onClick={() => { setEditingCategory(category); setShowModal(true) }}
+                              title={t("categoriesPage.edit")}
+                            >
+                              <Edit2 className="w-4 h-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                              onClick={() => setDeletingId(category._id)}
+                              title={t("categoriesPage.delete")}
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        </TableCell>
                       )}
                     </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {paginatedCategories.map((category) => {
-                      const IconComponent = getIconComponent(category.icon || "Package")
-                      const colorClass = getColorClass(category.iconColor || "blue")
-                      return (
-                        <TableRow
-                          key={category._id}
-                          className="border-b"
-                        >
-                          <TableCell className="px-6 py-3 flex items-center gap-2">
-                            <div className="flex items-center gap-3">
-                              <div
-                                className={`w-8 h-8 rounded-md ${colorClass} flex items-center justify-center flex-shrink-0`}
-                              >
-                                {IconComponent && <IconComponent className="w-4 h-4" />}
-                              </div>
-                              <div className="font-medium text-foreground">{category.name}</div>
-                            </div>
-                          </TableCell>
-                          <TableCell className="px-4 py-3 flex items-center gap-2 hidden md:table-cell">
-                            <div className="text-sm text-muted-foreground line-clamp-2">
-                              {category.description || "—"}
-                            </div>
-                          </TableCell>
-                          <TableCell className="px-4 py-3 flex items-center gap-2 text-center">
-                            <Badge variant="secondary" className="font-medium text-xs">
-                              {category.itemsCount}
-                            </Badge>
-                          </TableCell>
-                          {!isEmploye && (
-                            <TableCell className="px-6 py-3 text-right">
-                              <div className="flex justify-end gap-1">
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  className="h-8 w-8 text-muted-foreground hover:text-foreground"
-                                  onClick={() => {
-                                    setEditingCategory(category)
-                                    setShowModal(true)
-                                  }}
-                                  title="Edit category"
-                                >
-                                  <Edit2 className="w-4 h-4" />
-                                </Button>
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                                  onClick={() => setDeletingId(category._id)}
-                                  title="Delete category"
-                                >
-                                  <Trash2 className="w-4 h-4" />
-                                </Button>
-                              </div>
-                            </TableCell>
-                          )}
-                        </TableRow>
-                      )
-                    })}
-                  </TableBody>
-                </Table>
+                  )
+                })}
+              </TableBody>
+            </Table>
+          </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between p-4 border-t">
+              <div className="flex items-center gap-2 text-sm">
+                <span className="text-muted-foreground">
+                  {t("categoriesPage.pagination.showing", { start: startIndex + 1, end: Math.min(endIndex, filteredCategories.length), total: filteredCategories.length })}
+                </span>
               </div>
-
-              {/* Pagination */}
-              {totalPages > 1 && (
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between p-4 border-t">
-                  <div className="flex items-center gap-2 text-sm">
-                    <span className="text-muted-foreground">
-                      Showing {startIndex + 1}-{Math.min(endIndex, filteredCategories.length)} of{" "}
-                      {filteredCategories.length}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-center gap-1">
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="h-8 w-8 bg-transparent"
-                      onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-                      disabled={currentPage === 1}
-                    >
-                      <ChevronLeft className="h-4 w-4" />
-                    </Button>
-                    <div className="flex items-center gap-2 px-3 text-sm">
-                      <span className="font-medium">{currentPage}</span>
-                      <span className="text-muted-foreground">/</span>
-                      <span className="text-muted-foreground">{totalPages}</span>
-                    </div>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="h-8 w-8 bg-transparent"
-                      onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
-                      disabled={currentPage === totalPages}
-                    >
-                      <ChevronRight className="h-4 w-4" />
-                    </Button>
-                  </div>
+              <div className="flex items-center justify-center gap-1">
+                <Button variant="outline" size="icon" className="h-8 w-8 bg-transparent" onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))} disabled={currentPage === 1}>
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+                <div className="flex items-center gap-2 px-3 text-sm">
+                  <span className="font-medium">{currentPage}</span>
+                  <span className="text-muted-foreground">/</span>
+                  <span className="text-muted-foreground">{totalPages}</span>
                 </div>
-              )}
-            </>
+                <Button variant="outline" size="icon" className="h-8 w-8 bg-transparent" onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))} disabled={currentPage === totalPages}>
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
           )}
-
+        </>
+      )}
 
       <CategoryModal
         open={showModal}
         onOpenChange={handleModalClose}
         onSave={editingCategory ? handleEditCategory : handleAddCategory}
-        initialData={
-          editingCategory
-            ? {
-                name: editingCategory.name,
-                description: editingCategory.description,
-                icon: editingCategory.icon,
-                iconColor: editingCategory.iconColor,
-              }
-            : undefined
-        }
+        initialData={editingCategory ? { name: editingCategory.name, description: editingCategory.description, icon: editingCategory.icon, iconColor: editingCategory.iconColor } : undefined}
         isEditing={!!editingCategory}
       />
 
       <AlertDialog open={deletingId !== null} onOpenChange={(open) => !open && setDeletingId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Category</AlertDialogTitle>
+            <AlertDialogTitle>{t("categoriesPage.delete")}</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete "{categories.find((c) => c._id === deletingId)?.name}"? This action cannot
-              be undone.
+              {t("categoriesPage.deleteConfirm", { name: categories.find((c) => c._id === deletingId)?.name })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => deletingId && handleDeleteCategory(deletingId)}
-              disabled={deleting}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              {deleting ? "Deleting..." : "Delete"}
+            <AlertDialogCancel disabled={deleting}>{t("categoriesPage.cancel")}</AlertDialogCancel>
+            <AlertDialogAction onClick={() => deletingId && handleDeleteCategory(deletingId)} disabled={deleting} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              {deleting ? t("categoriesPage.deleting") : t("categoriesPage.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
