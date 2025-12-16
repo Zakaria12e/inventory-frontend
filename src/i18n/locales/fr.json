@@ -106,5 +106,61 @@
     "deleteSuccess": "Catégorie \"{{name}}\" supprimée avec succès",
     "deleteError": "Échec de la suppression de la catégorie",
     "deleteErrorWithItems": "Impossible de supprimer une catégorie contenant {{count}} article(s). Supprimez d'abord les articles."
+  },
+  "categoryModal": {
+    "editTitle": "Modifier la catégorie",
+    "createTitle": "Créer une catégorie",
+    "editDescription": "Mettez à jour les informations de la catégorie ci-dessous.",
+    "createDescription": "Ajoutez une nouvelle catégorie pour organiser votre inventaire.",
+    "nameLabel": "Nom de la catégorie",
+    "namePlaceholder": "ex. : Électronique, Fournitures de bureau",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Description optionnelle pour cette catégorie",
+    "cancel": "Annuler",
+    "saveButtonEdit": "Mettre à jour la catégorie",
+    "saveButtonCreate": "Créer la catégorie"
+  },
+  "iconSelector": {
+    "iconLabel": "Icône de catégorie",
+    "colorLabel": "Couleur de l'icône",
+    "selectPlaceholder": "Sélectionnez une icône...",
+    "icons": {
+      "Zap": "Électricité",
+      "Truck": "Logistique / Transport",
+      "Hammer": "Construction / Outils",
+      "Wrench": "Maintenance",
+      "Oil": "Pétrole / Huile",
+      "Tube": "Tube / Tuyau",
+      "GasCylinder": "Cylindre de gaz",
+      "Package": "Matériaux / Fournitures",
+      "Leaf": "Environnement / Paysage",
+      "Cpu": "Automatisation / Contrôle",
+      "Lightbulb": "Éclairage / Électricité",
+      "Pill": "Sécurité / Santé",
+      "Monitor": "Surveillance / Informatique",
+      "BarChart3": "Indicateurs / Performance",
+      "Briefcase": "Gestion de projet",
+      "ShoppingBag": "Équipement / Fournitures",
+      "Utensils": "Cantine / Nourriture",
+      "Home": "Bâtiments / Structures"
+    },
+    "colors": {
+      "red": "Rouge",
+      "orange": "Orange",
+      "amber": "Ambre",
+      "yellow": "Jaune",
+      "lime": "Citron vert",
+      "green": "Vert",
+      "emerald": "Émeraude",
+      "teal": "Sarcelle",
+      "cyan": "Cyan",
+      "blue": "Bleu",
+      "indigo": "Indigo",
+      "violet": "Violet",
+      "purple": "Pourpre",
+      "pink": "Rose",
+      "rose": "Rose foncé",
+      "gray": "Gris"
+    }
   }
 }

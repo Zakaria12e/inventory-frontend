@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { IconSelector } from "./icon-selector"
+import { useTranslation } from "react-i18next"
 
 interface CategoryModalProps {
   open: boolean
@@ -17,6 +18,7 @@ interface CategoryModalProps {
 }
 
 export function CategoryModal({ open, onOpenChange, onSave, initialData, isEditing }: CategoryModalProps) {
+  const { t } = useTranslation()
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
   const [icon, setIcon] = useState("Package")
@@ -45,39 +47,43 @@ export function CategoryModal({ open, onOpenChange, onSave, initialData, isEditi
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>{isEditing ? "Edit Category" : "Create Category"}</DialogTitle>
+          <DialogTitle>{isEditing ? t("categoryModal.editTitle") : t("categoryModal.createTitle")}</DialogTitle>
           <DialogDescription>
-            {isEditing ? "Update the category information below." : "Add a new category to organize your inventory."}
+            {isEditing ? t("categoryModal.editDescription") : t("categoryModal.createDescription")}
           </DialogDescription>
         </DialogHeader>
+
         <div className="space-y-4 py-4">
           <div className="space-y-2">
-            <Label htmlFor="category-name">Category Name</Label>
+            <Label htmlFor="category-name">{t("categoryModal.nameLabel")}</Label>
             <Input
               id="category-name"
-              placeholder="e.g., Electronics, Office Supplies"
+              placeholder={t("categoryModal.namePlaceholder")}
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
           </div>
+
           <div className="space-y-2">
-            <Label htmlFor="category-description">Description</Label>
+            <Label htmlFor="category-description">{t("categoryModal.descriptionLabel")}</Label>
             <Textarea
               id="category-description"
-              placeholder="Optional description for this category"
+              placeholder={t("categoryModal.descriptionPlaceholder")}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={3}
             />
           </div>
+
           <IconSelector value={icon} onIconChange={setIcon} color={iconColor} onColorChange={setIconColor} />
         </div>
+
         <div className="flex gap-3 justify-end">
           <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Cancel
+            {t("categoryModal.cancel")}
           </Button>
           <Button onClick={handleSave} disabled={!name.trim()}>
-            {isEditing ? "Update Category" : "Create Category"}
+            {isEditing ? t("categoryModal.saveButtonEdit") : t("categoryModal.saveButtonCreate")}
           </Button>
         </div>
       </DialogContent>

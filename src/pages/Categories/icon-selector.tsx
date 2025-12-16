@@ -25,6 +25,7 @@ import { cn } from "@/lib/utils"
 import { OilIcon } from "@/components/icons/OilIcon"
 import { TubeIcon } from "@/components/icons/TubeIcon"
 import { GasCylinderIcon } from "@/components/icons/GasCylinderIcon"
+import { useTranslation } from "react-i18next"
 
 interface IconOption {
   name: string
@@ -83,21 +84,22 @@ interface IconSelectorProps {
 
 export function IconSelector({ value, onIconChange, color, onColorChange }: IconSelectorProps) {
   const selectedIcon = CONSTRUCTION_ICONS.find((i) => i.name === value)
+  const { t } = useTranslation()
 
-  return (
+return (
     <div className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="icon-select">Category Icon</Label>
+        <Label htmlFor="icon-select">{t("iconSelector.iconLabel")}</Label>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="w-full justify-start bg-transparent" id="icon-select">
               {selectedIcon ? (
                 <>
                   <span className="mr-2">{selectedIcon.icon}</span>
-                  {selectedIcon.label}
+                  {t(`iconSelector.icons.${selectedIcon.name}`)}
                 </>
               ) : (
-                "Select an icon..."
+                t("iconSelector.selectPlaceholder")
               )}
             </Button>
           </DropdownMenuTrigger>
@@ -109,7 +111,7 @@ export function IconSelector({ value, onIconChange, color, onColorChange }: Icon
                 onClick={() => onIconChange(icon.name)}
               >
                 <span className="mr-2">{icon.icon}</span>
-                {icon.label}
+                {t(`iconSelector.icons.${icon.name}`)}
               </DropdownMenuItemButton>
             ))}
           </DropdownMenuContent>
@@ -117,7 +119,7 @@ export function IconSelector({ value, onIconChange, color, onColorChange }: Icon
       </div>
 
       <div className="space-y-2">
-        <Label>Icon Color</Label>
+        <Label>{t("iconSelector.colorLabel")}</Label>
         <div className="grid grid-cols-8 gap-2">
           {COLORS.map((colorOption) => (
             <button
@@ -128,7 +130,7 @@ export function IconSelector({ value, onIconChange, color, onColorChange }: Icon
                 color === colorOption.name ? "border-foreground scale-110" : "border-transparent hover:scale-105",
               )}
               style={{ backgroundColor: colorOption.value }}
-              title={colorOption.label}
+              title={t(`iconSelector.colors.${colorOption.name}`)}
             />
           ))}
         </div>

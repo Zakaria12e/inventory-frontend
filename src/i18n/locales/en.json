@@ -106,5 +106,61 @@
     "deleteSuccess": "Category \"{{name}}\" deleted successfully",
     "deleteError": "Failed to delete category",
     "deleteErrorWithItems": "Cannot delete category with {{count}} item(s). Remove items first."
+  },
+  "categoryModal": {
+    "editTitle": "Edit Category",
+    "createTitle": "Create Category",
+    "editDescription": "Update the category information below.",
+    "createDescription": "Add a new category to organize your inventory.",
+    "nameLabel": "Category Name",
+    "namePlaceholder": "e.g., Electronics, Office Supplies",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Optional description for this category",
+    "cancel": "Cancel",
+    "saveButtonEdit": "Update Category",
+    "saveButtonCreate": "Create Category"
+  },
+  "iconSelector": {
+    "iconLabel": "Category Icon",
+    "colorLabel": "Icon Color",
+    "selectPlaceholder": "Select an icon...",
+    "icons": {
+      "Zap": "Electricity",
+      "Truck": "Logistics / Transport",
+      "Hammer": "Construction / Tools",
+      "Wrench": "Maintenance",
+      "Oil": "Oil / Petroleum",
+      "Tube": "Tube / Pipe",
+      "GasCylinder": "Gas Cylinder",
+      "Package": "Materials / Supplies",
+      "Leaf": "Environment / Landscaping",
+      "Cpu": "Automation / Control",
+      "Lightbulb": "Lighting / Electricity",
+      "Pill": "Safety / Health",
+      "Monitor": "Monitoring / IT",
+      "BarChart3": "Metrics / Performance",
+      "Briefcase": "Project Management",
+      "ShoppingBag": "Equipment / Supplies",
+      "Utensils": "Cafeteria / Food",
+      "Home": "Buildings / Structures"
+    },
+    "colors": {
+      "red": "Red",
+      "orange": "Orange",
+      "amber": "Amber",
+      "yellow": "Yellow",
+      "lime": "Lime",
+      "green": "Green",
+      "emerald": "Emerald",
+      "teal": "Teal",
+      "cyan": "Cyan",
+      "blue": "Blue",
+      "indigo": "Indigo",
+      "violet": "Violet",
+      "purple": "Purple",
+      "pink": "Pink",
+      "rose": "Rose",
+      "gray": "Gray"
+    }
   }
 }

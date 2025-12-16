@@ -106,6 +106,62 @@
     "deleteSuccess": "Categoría \"{{name}}\" eliminada exitosamente",
     "deleteError": "Error al eliminar la categoría",
     "deleteErrorWithItems": "No se puede eliminar una categoría con {{count}} artículo(s). Elimina primero los artículos."
+  },
+  "categoryModal": {
+    "editTitle": "Editar categoría",
+    "createTitle": "Crear categoría",
+    "editDescription": "Actualiza la información de la categoría a continuación.",
+    "createDescription": "Agrega una nueva categoría para organizar tu inventario.",
+    "nameLabel": "Nombre de la categoría",
+    "namePlaceholder": "ej. Electrónica, Suministros de oficina",
+    "descriptionLabel": "Descripción",
+    "descriptionPlaceholder": "Descripción opcional para esta categoría",
+    "cancel": "Cancelar",
+    "saveButtonEdit": "Actualizar categoría",
+    "saveButtonCreate": "Crear categoría"
+  },
+  "iconSelector": {
+    "iconLabel": "Icono de categoría",
+    "colorLabel": "Color del icono",
+    "selectPlaceholder": "Selecciona un icono...",
+    "icons": {
+      "Zap": "Electricidad",
+      "Truck": "Logística / Transporte",
+      "Hammer": "Construcción / Herramientas",
+      "Wrench": "Mantenimiento",
+      "Oil": "Petróleo / Aceite",
+      "Tube": "Tubo / Conducto",
+      "GasCylinder": "Cilindro de gas",
+      "Package": "Materiales / Suministros",
+      "Leaf": "Medio ambiente / Jardinería",
+      "Cpu": "Automatización / Control",
+      "Lightbulb": "Iluminación / Electricidad",
+      "Pill": "Seguridad / Salud",
+      "Monitor": "Monitoreo / IT",
+      "BarChart3": "Métricas / Rendimiento",
+      "Briefcase": "Gestión de proyectos",
+      "ShoppingBag": "Equipamiento / Suministros",
+      "Utensils": "Cafetería / Comida",
+      "Home": "Edificios / Estructuras"
+    },
+    "colors": {
+      "red": "Rojo",
+      "orange": "Naranja",
+      "amber": "Ámbar",
+      "yellow": "Amarillo",
+      "lime": "Lima",
+      "green": "Verde",
+      "emerald": "Esmeralda",
+      "teal": "Verde azulado",
+      "cyan": "Cian",
+      "blue": "Azul",
+      "indigo": "Índigo",
+      "violet": "Violeta",
+      "purple": "Púrpura",
+      "pink": "Rosa",
+      "rose": "Rosa fuerte",
+      "gray": "Gris"
+    }
   }
 
 }
