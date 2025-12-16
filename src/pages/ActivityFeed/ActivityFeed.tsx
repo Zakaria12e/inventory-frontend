@@ -1,12 +1,24 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, Calendar, Package, Trash2, CheckCircle2, Clock, Activity as ActivityIcon, ChevronLeft, ChevronRight, X } from "lucide-react";
+import {
+  Search,
+  Calendar,
+  Package,
+  Trash2,
+  CheckCircle2,
+  Clock,
+  Activity as ActivityIcon,
+  ChevronLeft,
+  ChevronRight,
+  X,
+} from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -26,6 +38,7 @@ type Activity = {
 };
 
 export default function ActivityFeed() {
+  const { t } = useTranslation();
   const [activities, setActivities] = useState<Activity[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
@@ -33,7 +46,7 @@ export default function ActivityFeed() {
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-  
+
   const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
@@ -114,11 +127,11 @@ export default function ActivityFeed() {
   }, [searchQuery, dateFilter, sortOrder]);
 
   const getIcon = (action: string) => {
-    if (action.toLowerCase().includes("added") || action.toLowerCase().includes("created")) 
+    if (action.toLowerCase().includes("added") || action.toLowerCase().includes("created"))
       return <Package className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />;
-    if (action.toLowerCase().includes("deleted") || action.toLowerCase().includes("removed")) 
+    if (action.toLowerCase().includes("deleted") || action.toLowerCase().includes("removed"))
       return <Trash2 className="w-4 h-4 text-rose-600 dark:text-rose-400" />;
-    if (action.toLowerCase().includes("updated") || action.toLowerCase().includes("modified")) 
+    if (action.toLowerCase().includes("updated") || action.toLowerCase().includes("modified"))
       return <CheckCircle2 className="w-4 h-4 text-amber-600 dark:text-amber-400" />;
     return <ActivityIcon className="w-4 h-4 text-blue-600 dark:text-blue-400" />;
   };
@@ -131,7 +144,7 @@ export default function ActivityFeed() {
 
   const hasActiveFilters = searchQuery || dateFilter || sortOrder !== "desc";
 
- return (
+  return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       {/* Header Section */}
       <div className="sticky top-0 z-50 border-b border-border/40 backdrop-blur-sm bg-background/95">
@@ -141,9 +154,9 @@ export default function ActivityFeed() {
               <div className="p-2 rounded-lg bg-primary/10">
                 <Clock className="h-5 w-5 text-primary" />
               </div>
-              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-balance">Activity Feed</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-balance">{t("activityFeed.title")}</h1>
             </div>
-            <p className="text-sm text-muted-foreground">Monitor all system activities and changes in real-time</p>
+            <p className="text-sm text-muted-foreground">{t("activityFeed.description")}</p>
           </div>
         </div>
       </div>
@@ -155,14 +168,14 @@ export default function ActivityFeed() {
           <CardHeader className="pb-4">
             <div className="flex items-center gap-2 mb-4">
               <Search className="w-4 h-4 text-muted-foreground" />
-              <h2 className="font-semibold text-sm">Filter Activities</h2>
+              <h2 className="font-semibold text-sm">{t("activityFeed.filterTitle")}</h2>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               <div className="lg:col-span-2 relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
                 <Input
-                  placeholder="Search by user, action, or role..."
+                  placeholder={t("activityFeed.searchPlaceholder")}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-9 h-10 text-sm"
@@ -182,18 +195,18 @@ export default function ActivityFeed() {
               <div className="flex gap-2">
                 <Select value={sortOrder} onValueChange={(v) => setSortOrder(v as any)}>
                   <SelectTrigger className="h-10 text-sm flex-1">
-                    <SelectValue placeholder="Sort" />
+                    <SelectValue placeholder={t("activityFeed.sortLabel")} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="desc">Newest First</SelectItem>
-                    <SelectItem value="asc">Oldest First</SelectItem>
+                    <SelectItem value="desc">{t("activityFeed.sort.newest")}</SelectItem>
+                    <SelectItem value="asc">{t("activityFeed.sort.oldest")}</SelectItem>
                   </SelectContent>
                 </Select>
 
                 {hasActiveFilters && (
                   <Button variant="outline" size="sm" onClick={clearFilters} className="gap-1 h-10 bg-transparent">
                     <X className="w-4 h-4" />
-                    <span className="hidden sm:inline">Clear</span>
+                    <span className="hidden sm:inline">{t("activityFeed.clear")}</span>
                   </Button>
                 )}
               </div>
@@ -209,16 +222,16 @@ export default function ActivityFeed() {
                 <thead>
                   <tr className="border-b border-border/50 bg-muted/30">
                     <th className="px-6 py-4 text-left font-semibold text-xs uppercase tracking-wider text-muted-foreground">
-                      User
+                      {t("activityFeed.user")}
                     </th>
                     <th className="px-6 py-4 text-left font-semibold text-xs uppercase tracking-wider text-muted-foreground">
-                      Role
+                      {t("activityFeed.role")}
                     </th>
                     <th className="px-6 py-4 text-left font-semibold text-xs uppercase tracking-wider text-muted-foreground">
-                      Action
+                      {t("activityFeed.action")}
                     </th>
                     <th className="px-6 py-4 text-right font-semibold text-xs uppercase tracking-wider text-muted-foreground">
-                      Date & Time
+                      {t("activityFeed.dateTime")}
                     </th>
                   </tr>
                 </thead>
@@ -250,11 +263,9 @@ export default function ActivityFeed() {
                           <div className="rounded-full bg-muted p-3">
                             <Clock className="h-6 w-6 text-muted-foreground" />
                           </div>
-                          <p className="font-medium">No activities found</p>
+                          <p className="font-medium">{t("activityFeed.noActivities")}</p>
                           <p className="text-sm text-muted-foreground max-w-xs">
-                            {hasActiveFilters
-                              ? "Try adjusting your filters"
-                              : "Activities will appear here as users interact with the system"}
+                            {hasActiveFilters ? t("activityFeed.tryFilters") : t("activityFeed.empty")}
                           </p>
                         </div>
                       </td>
@@ -265,10 +276,7 @@ export default function ActivityFeed() {
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
                             <Avatar className="w-10 h-10">
-                              <AvatarImage
-                                src={`${activity.user?.profile_image}`}
-                                alt={activity.user?.first_name}
-                              />
+                              <AvatarImage src={`${activity.user?.profile_image}`} alt={activity.user?.first_name} />
                               <AvatarFallback
                                 style={{
                                   backgroundColor: colorMap[activity.user?.avatarColor || "bg-blue-500"],
@@ -280,7 +288,7 @@ export default function ActivityFeed() {
                             </Avatar>
                             <div className="flex flex-col">
                               <span className="font-medium text-foreground">
-                                {activity.user?.first_name || "Unknown User"}
+                                {activity.user?.first_name || t("activityFeed.unknownUser")}
                               </span>
                               <span className="text-xs text-muted-foreground">{activity.user?.email}</span>
                             </div>
@@ -334,11 +342,11 @@ export default function ActivityFeed() {
               <div className="rounded-full bg-muted p-4 mb-4">
                 <Clock className="h-6 w-6 text-muted-foreground" />
               </div>
-              <p className="font-semibold text-center text-foreground">No activities found</p>
+              <p className="font-semibold text-center text-foreground">{t("activityFeed.noActivities")}</p>
               <p className="text-sm text-muted-foreground text-center mt-2">
                 {hasActiveFilters
-                  ? "Try adjusting your filters"
-                  : "Activities will appear here as users interact with the system"}
+                  ? t("activityFeed.tryFilters")
+                  : t("activityFeed.empty")}
               </p>
             </div>
           ) : (
@@ -362,14 +370,14 @@ export default function ActivityFeed() {
 
                       <div className="flex flex-col min-w-0">
                         <span className="font-semibold text-foreground text-xs">
-                          {activity.user?.first_name || "Unknown User"}
+                          {activity.user?.first_name || t("activityFeed.unknownUser")}
                         </span>
                         <span className="text-xs text-muted-foreground truncate">{activity.user?.email}</span>
                       </div>
                     </div>
 
                     <Badge variant="secondary" className="text-xs capitalize font-medium shrink-0">
-                      {activity.user?.role || "N/A"}
+                      {activity.user?.role}
                     </Badge>
                   </div>
 

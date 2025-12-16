@@ -162,6 +162,26 @@
       "rose": "Rosa fuerte",
       "gray": "Gris"
     }
+  },
+   "activityFeed": {
+    "title": "Registro de Actividades",
+    "description": "Supervise todas las actividades y cambios del sistema en tiempo real",
+    "filterTitle": "Filtrar Actividades",
+    "searchPlaceholder": "Buscar por usuario, acción o rol...",
+    "sortLabel": "Ordenar",
+    "sort": {
+      "newest": "Más recientes primero",
+      "oldest": "Más antiguos primero"
+    },
+    "clear": "Limpiar",
+    "noActivities": "No se encontraron actividades",
+    "tryFilters": "Intente ajustar sus filtros",
+    "empty": "Las actividades aparecerán aquí a medida que los usuarios interactúen con el sistema",
+    "user": "Usuario",
+    "role": "Rol",
+    "action": "Acción",
+    "dateTime": "Fecha y Hora",
+    "unknownUser": "Usuario desconocido"
   }
 
 }

@@ -162,5 +162,25 @@
       "rose": "Rose foncé",
       "gray": "Gris"
     }
+  },
+  "activityFeed": {
+    "title": "Flux d'activités",
+    "description": "Surveillez toutes les activités et modifications du système en temps réel",
+    "filterTitle": "Filtrer les activités",
+    "searchPlaceholder": "Rechercher par utilisateur, action ou rôle...",
+    "sortLabel": "Trier",
+    "sort": {
+      "newest": "Les plus récents d'abord",
+      "oldest": "Les plus anciens d'abord"
+    },
+    "clear": "Effacer",
+    "noActivities": "Aucune activité trouvée",
+    "tryFilters": "Essayez d'ajuster vos filtres",
+    "empty": "Les activités apparaîtront ici lorsque les utilisateurs interagiront avec le système",
+    "user": "Utilisateur",
+    "role": "Rôle",
+    "action": "Action",
+    "dateTime": "Date et heure",
+    "unknownUser": "Utilisateur inconnu"
   }
 }

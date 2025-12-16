@@ -162,5 +162,25 @@
       "rose": "Rose",
       "gray": "Gray"
     }
+  },
+   "activityFeed": {
+    "title": "Activity Feed",
+    "description": "Monitor all system activities and changes in real-time",
+    "filterTitle": "Filter Activities",
+    "searchPlaceholder": "Search by user, action, or role...",
+    "sortLabel": "Sort",
+    "sort": {
+      "newest": "Newest First",
+      "oldest": "Oldest First"
+    },
+    "clear": "Clear",
+    "noActivities": "No activities found",
+    "tryFilters": "Try adjusting your filters",
+    "empty": "Activities will appear here as users interact with the system",
+    "user": "User",
+    "role": "Role",
+    "action": "Action",
+    "dateTime": "Date & Time",
+    "unknownUser": "Unknown User"
   }
 }
