@@ -303,5 +303,26 @@
     "save": "Save",
     "saving": "Saving...",
     "saveSuccess": "Security settings updated"
-  }
+  },
+  "dashboard": {
+  "title": "Inventory Dashboard",
+  "description": "Real-time overview of your inventory health",
+  "totalItems": "Total Items",
+  "categories": "Categories",
+  "lowStock": "Low Stock Alert",
+  "units": "units",
+  "activeCategories": "Active classifications",
+  "needAttention": "Items need attention",
+  "stockDistribution": "Stock Distribution",
+  "unitsPerCategory": "Units per category",
+  "stockTrend": "Inventory Trend",
+  "evolution": "Stock evolution",
+  "activity": "Recent Activity",
+  "latestActions": "Latest system actions",
+  "alerts": "System Alerts",
+  "notifications": "Important notifications",
+  "today": "Today",
+  "yesterday": "Yesterday",
+  "daysAgo": "{{count}} days ago"
+}
 }

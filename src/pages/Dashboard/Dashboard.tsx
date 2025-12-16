@@ -1,318 +1,250 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import axios from "axios"
+import { useTranslation } from "react-i18next"
+import { motion } from "framer-motion"
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Package, Folder, AlertTriangle, DollarSign, TrendingUp, Clock } from "lucide-react"
+import { Package, Folder, AlertTriangle, Clock } from "lucide-react"
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, AreaChart, Area } from "recharts"
 import { Separator } from "@/components/ui/separator"
+import { Skeleton } from "@/components/ui/skeleton"
+
+const API_URL = import.meta.env.VITE_API_URL
 
 export default function DashboardPage() {
-  const [items] = useState([
-    { id: 1, name: "Cement", category: "Materials", stock: 40, price: 50 },
-    { id: 2, name: "Pipe", category: "Plumbing", stock: 8, price: 20 },
-    { id: 3, name: "Sand", category: "Materials", stock: 90, price: 10 },
-    { id: 4, name: "Cable", category: "Electrical", stock: 4, price: 15 },
-  ])
+  const { t } = useTranslation()
+  const [dashboard, setDashboard] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
 
-  const [categories] = useState([
-    { id: 1, name: "Materials" },
-    { id: 2, name: "Plumbing" },
-    { id: 3, name: "Electrical" },
-  ])
+  useEffect(() => {
+    const token = localStorage.getItem("token")
 
-  const [alerts] = useState([
-    { id: 1, message: "Low stock: Cable (4 units left)", date: "2025-11-01", type: "warning" },
-    { id: 2, message: "Low stock: Pipe (8 units left)", date: "2025-10-30", type: "warning" },
-    { id: 3, message: "New item added: Cement", date: "2025-10-29", type: "info" },
-    { id: 4, message: "Category deleted: Tools", date: "2025-10-28", type: "info" },
-  ])
+    axios
+      .get(`${API_URL}/dashboard`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => setDashboard(res.data))
+      .finally(() => setLoading(false))
+  }, [])
 
-  const totalValue = items.reduce((sum, item) => sum + item.stock * item.price, 0)
-  const lowStockCount = items.filter((i) => i.stock < 10).length
-  const totalStock = items.reduce((sum, item) => sum + item.stock, 0)
-
-  // Prepare data for category chart
-  const chartData = categories.map((cat) => ({
-    name: cat.name,
-    stock: items.filter((i) => i.category === cat.name).reduce((sum, i) => sum + i.stock, 0),
-    value: items.filter((i) => i.category === cat.name).reduce((sum, i) => sum + i.stock * i.price, 0),
-  }))
-
-  // Mock trend data for value over time
-  const trendData = [
-    { month: "Jul", value: 2800 },
-    { month: "Aug", value: 3200 },
-    { month: "Sep", value: 3600 },
-    { month: "Oct", value: 4100 },
-    { month: "Nov", value: 4500 },
-  ]
-
-  const getAlertIcon = (type : any) => {
-    if (type === "warning") return "⚠️"
-    return "ℹ️"
-  }
-
-  const formatDate = (dateString : any) => {
-    const date = new Date(dateString)
-    const now = new Date()
-    const diffTime = Math.abs(now.getTime() - date.getTime())
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
-    
-    if (diffDays === 0) return "Today"
-    if (diffDays === 1) return "Yesterday"
-    if (diffDays < 7) return `${diffDays} days ago`
-    return dateString
+  const formatDate = (date: string) => {
+    const diff = Math.floor((Date.now() - new Date(date).getTime()) / (1000 * 60 * 60 * 24))
+    if (diff === 0) return t("dashboard.today")
+    if (diff === 1) return t("dashboard.yesterday")
+    if (diff < 7) return t("dashboard.daysAgo", { count: diff })
+    return new Date(date).toLocaleDateString()
   }
 
   return (
-    <div className="flex flex-col gap-6 p-4 md:p-6 lg:p-8 max-w-7xl mx-auto w-full">
-      {/* Header with metrics summary */}
-      <div className="space-y-2">
-        <h1 className="text-3xl font-bold tracking-tight">Inventory Dashboard</h1>
-        <p className="text-muted-foreground">Real-time overview of your inventory health</p>
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="flex flex-col gap-6 p-4 md:p-6 lg:p-8 max-w-7xl mx-auto w-full"
+    >
+      {/* HEADER */}
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">{t("dashboard.title")}</h1>
+        <p className="text-muted-foreground">{t("dashboard.description")}</p>
       </div>
 
-      {/* Key Metrics Grid */}
+      {/* METRICS */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card className="overflow-hidden">
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-sm font-medium">Total Items</CardTitle>
-            <div className="p-2 rounded-md bg-muted">
-              <Package className="w-4 h-4" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">{items.length}</div>
-            <div className="flex items-center gap-1 mt-1">
-              <span className="text-xs text-muted-foreground">{totalStock} total units</span>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="overflow-hidden">
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-sm font-medium">Categories</CardTitle>
-            <div className="p-2 rounded-md bg-muted">
-              <Folder className="w-4 h-4" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">{categories.length}</div>
-            <div className="flex items-center gap-1 mt-1">
-              <span className="text-xs text-muted-foreground">Active classifications</span>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="overflow-hidden border-destructive/50">
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-sm font-medium">Low Stock Alert</CardTitle>
-            <div className="p-2 rounded-md bg-destructive/10">
-              <AlertTriangle className="w-4 h-4 text-destructive" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">{lowStockCount}</div>
-            <div className="flex items-center gap-1 mt-1">
-              <span className="text-xs text-muted-foreground">Items need attention</span>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="overflow-hidden">
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-sm font-medium">Stock Value</CardTitle>
-            <div className="p-2 rounded-md bg-muted">
-              <DollarSign className="w-4 h-4" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">${totalValue.toLocaleString()}</div>
-            <div className="flex items-center gap-1 mt-1">
-              <TrendingUp className="w-3 h-3" />
-              <span className="text-xs text-muted-foreground">+12% from last month</span>
-            </div>
-          </CardContent>
-        </Card>
+        {loading ? (
+          <>
+            <MetricSkeleton />
+            <MetricSkeleton />
+            <MetricSkeleton />
+          </>
+        ) : (
+          <>
+            <MetricCard
+              title={t("dashboard.totalItems")}
+              value={dashboard.stats.totalItems}
+              subtitle={`${dashboard.stats.totalQuantity} ${t("dashboard.units")}`}
+              icon={<Package />}
+            />
+            <MetricCard
+              title={t("dashboard.categories")}
+              value={dashboard.charts.stockByCategory.length}
+              subtitle={t("dashboard.activeCategories")}
+              icon={<Folder />}
+            />
+            <MetricCard
+              title={t("dashboard.lowStock")}
+              value={dashboard.stats.lowStockCount}
+              subtitle={t("dashboard.needAttention")}
+              icon={<AlertTriangle className="text-destructive" />}
+              danger
+            />
+          </>
+        )}
       </div>
 
-      {/* Charts Row */}
+      {/* CHARTS */}
       <div className="grid gap-4 lg:grid-cols-2">
-        {/* Stock Distribution */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Stock Distribution</CardTitle>
-            <p className="text-sm text-muted-foreground">Units per category</p>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={280}>
-              <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <XAxis 
-                  dataKey="name" 
-                  tick={{ fontSize: 12 }}
-                  axisLine={false}
-                  tickLine={false}
-                />
-                <YAxis 
-                  tick={{ fontSize: 12 }}
-                  axisLine={false}
-                  tickLine={false}
-                />
-                <Tooltip 
-                  contentStyle={{ 
-                    borderRadius: '8px',
-                    border: 'none',
-                    boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
-                  }}
-                />
-                <Bar 
-                  dataKey="stock" 
-                  radius={[6, 6, 0, 0]}
-                  className="fill-primary"
-                />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
+        {loading ? (
+          <>
+            <ChartSkeleton />
+            <ChartSkeleton />
+          </>
+        ) : (
+          <>
+            <Card>
+              <CardHeader>
+                <CardTitle>{t("dashboard.stockDistribution")}</CardTitle>
+                <p className="text-sm text-muted-foreground">{t("dashboard.unitsPerCategory")}</p>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer height={280}>
+                  <BarChart data={dashboard.charts.stockByCategory}>
+                    <XAxis dataKey="category" />
+                    <YAxis />
+                    <Tooltip />
+                    <Bar dataKey="stock" fill="var(--chart-1)" radius={[6, 6, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
 
-        {/* Value Trend */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Inventory Value Trend</CardTitle>
-            <p className="text-sm text-muted-foreground">Last 5 months</p>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={280}>
-              <AreaChart data={trendData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="valueGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="currentColor" stopOpacity={0.3} className="text-primary" />
-                    <stop offset="95%" stopColor="currentColor" stopOpacity={0} className="text-primary" />
-                  </linearGradient>
-                </defs>
-                <XAxis 
-                  dataKey="month" 
-                  tick={{ fontSize: 12 }}
-                  axisLine={false}
-                  tickLine={false}
-                />
-                <YAxis 
-                  tick={{ fontSize: 12 }}
-                  axisLine={false}
-                  tickLine={false}
-                />
-                <Tooltip 
-                  contentStyle={{ 
-                    borderRadius: '8px',
-                    border: 'none',
-                    boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
-                  }}
-                  formatter={(value) => [`$${value}`, 'Value']}
-                />
-                <Area 
-                  type="monotone" 
-                  dataKey="value" 
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  fill="url(#valueGradient)"
-                  className="text-primary"
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>{t("dashboard.stockTrend")}</CardTitle>
+                <p className="text-sm text-muted-foreground">{t("dashboard.evolution")}</p>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer height={280}>
+                  <AreaChart data={dashboard.charts.stockByCategory}>
+                    <XAxis dataKey="category" />
+                    <YAxis />
+                    <Tooltip />
+                    <Area dataKey="stock" stroke="var(--chart-1)" fill="var(--chart-1)" fillOpacity={0.15} />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+          </>
+        )}
       </div>
 
-      {/* Bottom Section */}
+      {/* PANELS */}
       <div className="grid gap-4 lg:grid-cols-2">
-        {/* Recent Activity */}
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="text-base">Recent Activity</CardTitle>
-                <p className="text-sm text-muted-foreground mt-1">Latest changes to inventory</p>
-              </div>
-              <Clock className="w-4 h-4 text-muted-foreground" />
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-start gap-3">
-              <div className="p-2 rounded-md bg-muted mt-0.5">
-                <span className="text-sm">➕</span>
-              </div>
-              <div className="flex-1 space-y-1">
-                <p className="text-sm font-medium">New item added</p>
-                <p className="text-sm text-muted-foreground">
-                  <span className="font-medium text-foreground">Cement</span> added to Materials category
-                </p>
-                <p className="text-xs text-muted-foreground">2 hours ago</p>
-              </div>
-            </div>
-            
-            <Separator />
-            
-            <div className="flex items-start gap-3">
-              <div className="p-2 rounded-md bg-muted mt-0.5">
-                <span className="text-sm">✏️</span>
-              </div>
-              <div className="flex-1 space-y-1">
-                <p className="text-sm font-medium">Category updated</p>
-                <p className="text-sm text-muted-foreground">
-                  Modified <span className="font-medium text-foreground">Plumbing</span> category details
-                </p>
-                <p className="text-xs text-muted-foreground">Yesterday</p>
-              </div>
-            </div>
-            
-            <Separator />
-            
-            <div className="flex items-start gap-3">
-              <div className="p-2 rounded-md bg-muted mt-0.5">
-                <span className="text-sm">🗑️</span>
-              </div>
-              <div className="flex-1 space-y-1">
-                <p className="text-sm font-medium">Item removed</p>
-                <p className="text-sm text-muted-foreground">
-                  Deleted <span className="font-medium text-foreground">Old tools</span> from inventory
-                </p>
-                <p className="text-xs text-muted-foreground">3 days ago</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Alerts Panel */}
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="text-base">System Alerts</CardTitle>
-                <p className="text-sm text-muted-foreground mt-1">Important notifications</p>
-              </div>
-              <AlertTriangle className="w-4 h-4 text-muted-foreground" />
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {alerts.slice(0, 3).map((alert, index) => (
-              <div key={alert.id}>
-                {index > 0 && <Separator className="mb-4" />}
-                <div className="flex items-start gap-3">
-                  <div className={`p-2 rounded-md mt-0.5 ${
-                    alert.type === 'warning' ? 'bg-destructive/10' : 'bg-muted'
-                  }`}>
-                    <span className="text-sm">{getAlertIcon(alert.type)}</span>
-                  </div>
-                  <div className="flex-1 space-y-1">
-                    <p className="text-sm font-medium">{alert.message}</p>
-                    <p className="text-xs text-muted-foreground">{formatDate(alert.date)}</p>
-                  </div>
+        {loading ? (
+          <>
+            <PanelSkeleton />
+            <PanelSkeleton />
+          </>
+        ) : (
+          <>
+            {/* ACTIVITY */}
+            <Card>
+              <CardHeader className="flex justify-between">
+                <div>
+                  <CardTitle>{t("dashboard.activity")}</CardTitle>
+                  <p className="text-sm text-muted-foreground">{t("dashboard.latestActions")}</p>
                 </div>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
+                <Clock className="w-4 h-4" />
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {dashboard.panels.activities.map((a: any, i: number) => (
+                  <div key={a._id}>
+                    {i > 0 && <Separator />}
+                    <p className="text-sm">
+                      <span className="font-medium">{a.user?.name}</span> {a.action}
+                    </p>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+
+            {/* ALERTS */}
+            <Card>
+              <CardHeader>
+                <CardTitle>{t("dashboard.alerts")}</CardTitle>
+                <p className="text-sm text-muted-foreground">{t("dashboard.notifications")}</p>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {dashboard.panels.alerts.map((a: any, i: number) => (
+                  <div key={a._id}>
+                    {i > 0 && <Separator />}
+                    <p className="text-sm font-medium">{a.message}</p>
+                    <p className="text-xs text-muted-foreground">{formatDate(a.createdAt)}</p>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          </>
+        )}
       </div>
-    </div>
+    </motion.div>
+  )
+}
+
+/* ================= COMPONENTS ================= */
+
+function MetricCard({ title, value, subtitle, icon, danger }: any) {
+  return (
+    <motion.div whileHover={{ scale: 1.02 }}>
+      <Card className={danger ? "border-destructive/50" : ""}>
+        <CardHeader className="flex justify-between items-center pb-2">
+          <CardTitle className="text-sm">{title}</CardTitle>
+          {icon}
+        </CardHeader>
+        <CardContent>
+          <p className="text-3xl font-bold">{value}</p>
+          <p className="text-xs text-muted-foreground">{subtitle}</p>
+        </CardContent>
+      </Card>
+    </motion.div>
+  )
+}
+
+function MetricSkeleton() {
+  return (
+    <Card>
+      <CardHeader className="flex justify-between pb-2">
+        <Skeleton className="h-4 w-24" />
+        <Skeleton className="h-5 w-5 rounded-md" />
+      </CardHeader>
+      <CardContent>
+        <Skeleton className="h-8 w-16 mb-2" />
+        <Skeleton className="h-3 w-24" />
+      </CardContent>
+    </Card>
+  )
+}
+
+function ChartSkeleton() {
+  return (
+    <Card>
+      <CardHeader>
+        <Skeleton className="h-4 w-40 mb-2" />
+        <Skeleton className="h-3 w-56" />
+      </CardHeader>
+      <CardContent>
+        <Skeleton className="h-[280px] w-full rounded-lg" />
+      </CardContent>
+    </Card>
+  )
+}
+
+function PanelSkeleton() {
+  return (
+    <Card>
+      <CardHeader>
+        <Skeleton className="h-4 w-32" />
+        <Skeleton className="h-3 w-48 mt-2" />
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {[...Array(4)].map((_, i) => (
+          <div key={i} className="space-y-2">
+            <Skeleton className="h-3 w-full" />
+            <Skeleton className="h-3 w-24" />
+          </div>
+        ))}
+      </CardContent>
+    </Card>
   )
 }

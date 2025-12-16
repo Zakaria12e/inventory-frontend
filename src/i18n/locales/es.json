@@ -303,6 +303,27 @@
     "save": "Guardar",
     "saving": "Guardando...",
     "saveSuccess": "Configuración de seguridad actualizada"
-  }
+  },
+  "dashboard": {
+  "title": "Panel de Inventario",
+  "description": "Vista en tiempo real del estado del inventario",
+  "totalItems": "Artículos Totales",
+  "categories": "Categorías",
+  "lowStock": "Stock Bajo",
+  "units": "unidades",
+  "activeCategories": "Clasificaciones activas",
+  "needAttention": "Requieren atención",
+  "stockDistribution": "Distribución de Stock",
+  "unitsPerCategory": "Unidades por categoría",
+  "stockTrend": "Tendencia del Inventario",
+  "evolution": "Evolución del stock",
+  "activity": "Actividad Reciente",
+  "latestActions": "Últimas acciones",
+  "alerts": "Alertas del Sistema",
+  "notifications": "Notificaciones importantes",
+  "today": "Hoy",
+  "yesterday": "Ayer",
+  "daysAgo": "Hace {{count}} días"
+}
 
 }

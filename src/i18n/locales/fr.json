@@ -302,5 +302,26 @@
     "save": "Enregistrer",
     "saving": "Enregistrement...",
     "saveSuccess": "Paramètres de sécurité mis à jour"
-  }
+  },
+  "dashboard": {
+  "title": "Tableau de Bord",
+  "description": "Vue en temps réel de l'état du stock",
+  "totalItems": "Articles Totaux",
+  "categories": "Catégories",
+  "lowStock": "Stock Faible",
+  "units": "unités",
+  "activeCategories": "Catégories actives",
+  "needAttention": "Nécessitent une action",
+  "stockDistribution": "Répartition du Stock",
+  "unitsPerCategory": "Unités par catégorie",
+  "stockTrend": "Évolution du Stock",
+  "evolution": "Évolution des quantités",
+  "activity": "Activité Récente",
+  "latestActions": "Dernières actions",
+  "alerts": "Alertes Système",
+  "notifications": "Notifications importantes",
+  "today": "Aujourd’hui",
+  "yesterday": "Hier",
+  "daysAgo": "Il y a {{count}} jours"
+}
 }
