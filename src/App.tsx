@@ -12,6 +12,7 @@ import SettingsPage from "@/pages/Settings/SettingsPage";
 import SupportPage from "@/pages/Support/SupportPage";
 import LoginPage from "@/pages/login/login";
 import ActivityFeed from "@/pages/ActivityFeed/ActivityFeed";
+import { LanguageProvider } from "@/context/LanguageContext"
 
 import { AuthProvider } from "@/context/AuthContext";
 
@@ -19,6 +20,7 @@ function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <AuthProvider>
+        <LanguageProvider>
         <BrowserRouter>
           <Routes>
             {/* Public routes */}
@@ -47,6 +49,7 @@ function App() {
           </Routes>
           <Toaster />
         </BrowserRouter>
+      </LanguageProvider>
       </AuthProvider>
     </ThemeProvider>
   );

@@ -1,0 +1,30 @@
+{
+  "appearance": {
+    "title": "Paramètres d’apparence",
+    "description": "Personnalisez l’apparence de votre interface",
+    "theme": "Thème",
+    "language": "Langue",
+    "dateFormat": "Format de date",
+    "save": "Enregistrer",
+    "saving": "Enregistrement...",
+    "saved": "Paramètres enregistrés",
+    "light": "Clair",
+    "dark": "Sombre",
+    "system": "Système"
+  },
+  "sidebar": {
+    "dashboard": "Tableau de bord",
+    "overview": "Aperçu",
+    "inventory-man": "Gestion des stocks",
+    "monitoring": "Surveillance",
+    "administration": "Administration",
+    "inventory": "Inventaire",
+    "categories": "Catégories",
+    "alerts": "Alertes",
+    "reports": "Rapports",
+    "users": "Utilisateurs",
+    "activity": "Flux d'activité",
+    "settings": "Paramètres",
+    "support": "Support"
+  }
+}

@@ -3,9 +3,9 @@ import React from "react"
 export function TubeIcon(props: React.ImgHTMLAttributes<HTMLImageElement>) {
   return (
     <img
-      src="https://cdn-icons-png.flaticon.com/512/5672/5672227.png"
+      src="https://res.cloudinary.com/dectxiuco/image/upload/v1765896810/tube-removebg-preview_sqmq4k.png"
       alt="Tube Icon"
-      className="w-4 h-4"
+      className="w-6 h-6"
       {...props}
     />
   )

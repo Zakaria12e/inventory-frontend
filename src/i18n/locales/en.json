@@ -1,0 +1,30 @@
+{
+  "appearance": {
+    "title": "Appearance Settings",
+    "description": "Customize the look and feel of your interface",
+    "theme": "Theme",
+    "language": "Language",
+    "dateFormat": "Date Format",
+    "save": "Save",
+    "saving": "Saving...",
+    "saved": "Settings saved",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+   "sidebar": {
+    "dashboard": "Dashboard",
+    "overview": "Overview",
+    "inventory-man": "Inventory Management",
+    "monitoring": "Monitoring",
+    "administration": "Administration",
+    "inventory": "Inventory",
+    "categories": "Categories",
+    "alerts": "Alerts",
+    "reports": "Reports",
+    "users": "Users",
+    "activity": "Activity Feed",
+    "settings": "Settings",
+    "support": "Support"
+  }
+}

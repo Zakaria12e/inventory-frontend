@@ -52,12 +52,15 @@ import { ModeToggle } from "@/components/mode-toggle";
 import AlertBell from "@/pages/Alerts/AlertBell";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/AuthContext";
+import { useTranslation } from "react-i18next"
 
 export default function DashboardLayout({ children,}: { children: React.ReactNode;}) {
 
  const { user, loading , logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useTranslation()
+
 
   const colorMap: Record<string, string> = {
   "bg-red-500": "#ef4444",
@@ -82,63 +85,63 @@ export default function DashboardLayout({ children,}: { children: React.ReactNod
   const routes = [
     {
       to: "/dashboard",
-      label: "Dashboard",
+      label: t("sidebar.dashboard"),
       icon: Home,
       color: "text-indigo-400 dark:text-indigo-300",
       visible: true,
     },
     {
       to: "/dashboard/inventory",
-      label: "Inventory",
+      label: t("sidebar.inventory"),
       icon: Package,
       color: "text-fuchsia-400 dark:text-fuchsia-300",
       visible: true,
     },
     {
       to: "/dashboard/categories",
-      label: "Categories",
+      label: t("sidebar.categories"),
       icon: Layers,
       color: "text-lime-400 dark:text-lime-300",
       visible: true,
     },
     {
       to: "/dashboard/alerts",
-      label: "Alerts",
+      label: t("sidebar.alerts"),
       icon: AlertTriangle,
       color: "text-destructive dark:text-destructive",
       visible: true,
     },
     {
       to: "/dashboard/reports",
-      label: "Reports",
+      label: t("sidebar.reports"),
       icon: FileText,
       color: "text-cyan-600 dark:text-cyan-400",
       visible: true,
     },
     {
       to: "/dashboard/users",
-      label: "Users",
+      label: t("sidebar.users"),
       icon: Users,
       color: "text-blue-600 dark:text-blue-400",
       visible: ["admin", "superadmin"].includes(user.role),
     },
     {
       to: "/dashboard/activity",
-      label: "Activity Feed",
+      label: t("sidebar.activity"),
       icon: ClipboardList,
       color: "text-amber-600 dark:text-amber-400",
       visible: ["admin", "superadmin"].includes(user.role),
     },
     {
       to: "/dashboard/settings",
-      label: "Settings",
+      label: t("sidebar.settings"),
       icon: Settings,
       color: "text-slate-600 dark:text-slate-300",
       visible: true,
     },
     {
       to: "/dashboard/support",
-      label: "Support",
+      label: t("sidebar.support"),
       icon: HelpCircle,
       color: "text-blue-600 dark:text-blue-400",
       visible: true,
@@ -147,35 +150,26 @@ export default function DashboardLayout({ children,}: { children: React.ReactNod
 
   // ✅ Breadcrumb logic
   const generateBreadcrumb = (pathname: string) => {
-    const segments = pathname.split("/").filter(Boolean);
-    const breadcrumbItems = [];
+    const segments = pathname.split("/").filter(Boolean)
+    const items: { label: string; href: string; isLast: boolean }[] = []
 
     if (segments.length > 1) {
-      breadcrumbItems.push({
-        label: "Dashboard",
-        href: "/dashboard",
-        isLast: false,
-      });
+      items.push({ label: t("sidebar.dashboard"), href: "/dashboard", isLast: false })
       if (segments[1]) {
-        const label =
-          segments[1].charAt(0).toUpperCase() + segments[1].slice(1);
-        breadcrumbItems.push({
-          label: label.replace("-", " "),
+        items.push({
+          label: t(`sidebar.${segments[1]}`) || segments[1],
           href: pathname,
           isLast: true,
-        });
+        })
       }
     } else {
-      breadcrumbItems.push({
-        label: "Dashboard",
-        href: "/dashboard",
-        isLast: true,
-      });
+      items.push({ label: t("sidebar.dashboard"), href: "/dashboard", isLast: true })
     }
-    return breadcrumbItems;
-  };
 
-  const breadcrumbItems = generateBreadcrumb(location.pathname);
+    return items
+  }
+
+  const breadcrumbItems = generateBreadcrumb(location.pathname)
 
   return (
     <SidebarProvider>
@@ -212,7 +206,7 @@ export default function DashboardLayout({ children,}: { children: React.ReactNod
         <SidebarContent>
           {/* Overview Section */}
           <SidebarGroup>
-            <SidebarGroupLabel>Overview</SidebarGroupLabel>
+            <SidebarGroupLabel>{t("sidebar.overview")}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {routes
@@ -237,7 +231,7 @@ export default function DashboardLayout({ children,}: { children: React.ReactNod
 
           {/* Inventory Management Section */}
           <SidebarGroup>
-            <SidebarGroupLabel>Inventory Management</SidebarGroupLabel>
+            <SidebarGroupLabel>{t("sidebar.inventory-man")}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {routes
@@ -267,7 +261,7 @@ export default function DashboardLayout({ children,}: { children: React.ReactNod
 
           {/* Monitoring Section */}
           <SidebarGroup>
-            <SidebarGroupLabel>Monitoring</SidebarGroupLabel>
+            <SidebarGroupLabel>{t("sidebar.monitoring")}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {routes
@@ -299,7 +293,7 @@ export default function DashboardLayout({ children,}: { children: React.ReactNod
 
           {/* Administration Section */}
           <SidebarGroup>
-            <SidebarGroupLabel>Administration</SidebarGroupLabel>
+            <SidebarGroupLabel>{t("sidebar.administration")}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {routes
