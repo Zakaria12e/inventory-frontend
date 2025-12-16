@@ -182,5 +182,33 @@
     "action": "Action",
     "dateTime": "Date et heure",
     "unknownUser": "Utilisateur inconnu"
+  },
+  "usersPage": {
+    "title": "Gestion des utilisateurs",
+    "description": "Gérez les utilisateurs et leurs permissions",
+    "addUser": "Ajouter un utilisateur",
+    "searchPlaceholder": "Rechercher des utilisateurs...",
+    "role": "Rôle",
+    "allRoles": "Tous les rôles",
+    "superadmin": "Superadmin",
+    "admin": "Admin",
+    "employe": "Employé",
+    "user": "Utilisateur",
+    "joined": "Rejoint",
+    "actions": "Actions",
+    "view": "Voir les détails",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "cancel": "Annuler",
+    "fetchError": "Échec de récupération des utilisateurs",
+    "deleteError": "Échec de suppression de l'utilisateur",
+    "userDeleted": "Utilisateur supprimé",
+    "deleteConfirmTitle": "Êtes-vous sûr ?",
+    "deleteConfirmDesc": "Cela supprimera l'utilisateur définitivement",
+    "roles": {
+      "superadmin": "Superadmin",
+      "admin": "Admin",
+      "employe": "Employé"
+    }
   }
 }

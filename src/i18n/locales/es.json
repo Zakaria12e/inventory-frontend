@@ -182,6 +182,34 @@
     "action": "Acción",
     "dateTime": "Fecha y Hora",
     "unknownUser": "Usuario desconocido"
+  },
+  "usersPage": {
+    "title": "Gestión de usuarios",
+    "description": "Administra usuarios y sus permisos",
+    "addUser": "Agregar usuario",
+    "searchPlaceholder": "Buscar usuarios...",
+    "role": "Rol",
+    "allRoles": "Todos los roles",
+    "superadmin": "Superadmin",
+    "admin": "Admin",
+    "employe": "Empleado",
+    "user": "Usuario",
+    "joined": "Registrado",
+    "actions": "Acciones",
+    "view": "Ver detalles",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "cancel": "Cancelar",
+    "fetchError": "Error al obtener usuarios",
+    "deleteError": "Error al eliminar usuario",
+    "userDeleted": "Usuario eliminado",
+    "deleteConfirmTitle": "¿Estás seguro?",
+    "deleteConfirmDesc": "Esto eliminará al usuario permanentemente",
+    "roles": {
+      "superadmin": "Superadmin",
+      "admin": "Admin",
+      "employe": "Empleado"
+    }
   }
 
 }

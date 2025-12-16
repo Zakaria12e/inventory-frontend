@@ -182,5 +182,34 @@
     "action": "Action",
     "dateTime": "Date & Time",
     "unknownUser": "Unknown User"
+  },
+
+  "usersPage": {
+    "title": "User Management",
+    "description": "Manage users and their permissions",
+    "addUser": "Add User",
+    "searchPlaceholder": "Search users...",
+    "role": "Role",
+    "allRoles": "All Roles",
+    "superadmin": "Superadmin",
+    "admin": "Admin",
+    "employe": "Employe",
+    "user": "User",
+    "joined": "Joined",
+    "actions": "Actions",
+    "view": "View Details",
+    "edit": "Edit",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "fetchError": "Failed to fetch users",
+    "deleteError": "Failed to delete user",
+    "userDeleted": "User deleted",
+    "deleteConfirmTitle": "Are you sure?",
+    "deleteConfirmDesc": "This will remove the user permanently",
+    "roles": {
+      "superadmin": "Superadmin",
+      "admin": "Admin",
+      "employe": "Employe"
+    }
   }
 }
