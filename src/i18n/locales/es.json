@@ -234,6 +234,39 @@
     "passwordMinLength": "La contraseña debe tener al menos 6 caracteres",
     "userCreated": "Usuario creado exitosamente",
     "creationFailed": "Error al crear usuario"
+  },
+  "settings": {
+    "title": "Configuración",
+    "description": "Administra la configuración de tu cuenta y preferencias",
+    "tabs": {
+      "profile": "Perfil",
+      "notifications": "Notificaciones",
+      "appearance": "Apariencia",
+      "security": "Seguridad"
+    }
+  },
+  "profile": {
+    "title": "Información del perfil",
+    "description": "Actualiza tus datos personales y foto de perfil",
+    "changePhoto": "Cambiar foto",
+    "change": "Cambiar",
+    "remove": "Eliminar",
+    "imageCleared": "Imagen eliminada. Haz clic en 'Guardar cambios' para confirmar.",
+    "avatarNote": "JPG, PNG o GIF. Máx. 2MB.",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "email": "Correo electrónico",
+    "phone": "Número de teléfono",
+    "bio": "Biografía",
+    "firstNamePlaceholder": "Juan",
+    "lastNamePlaceholder": "Pérez",
+    "emailPlaceholder": "juan@example.com",
+    "phonePlaceholder": "+34 612 345 678",
+    "bioPlaceholder": "Cuéntanos sobre ti",
+    "saveChanges": "Guardar cambios",
+    "saving": "Guardando...",
+    "updateSuccess": "Perfil actualizado con éxito",
+    "updateError": "Error al actualizar el perfil"
   }
 
 }

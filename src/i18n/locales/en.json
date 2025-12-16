@@ -235,5 +235,38 @@
     "passwordMinLength": "Password must be at least 6 characters",
     "userCreated": "User created successfully",
     "creationFailed": "Failed to create user"
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Manage your account settings and preferences",
+    "tabs": {
+      "profile": "Profile",
+      "notifications": "Notifications",
+      "appearance": "Appearance",
+      "security": "Security"
+    }
+  },
+  "profile": {
+    "title": "Profile Information",
+    "description": "Update your personal details and profile picture",
+    "changePhoto": "Change Photo",
+    "change": "Change",
+    "remove": "Remove",
+    "imageCleared": "Image cleared. Click 'Save Changes' to confirm.",
+    "avatarNote": "JPG, PNG or GIF. Max 2MB.",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email Address",
+    "phone": "Phone Number",
+    "bio": "Bio",
+    "firstNamePlaceholder": "John",
+    "lastNamePlaceholder": "Doe",
+    "emailPlaceholder": "john@example.com",
+    "phonePlaceholder": "+1 234 567 8900",
+    "bioPlaceholder": "Tell us about yourself",
+    "saveChanges": "Save Changes",
+    "saving": "Saving...",
+    "updateSuccess": "Profile updated successfully",
+    "updateError": "Failed to update profile"
   }
 }

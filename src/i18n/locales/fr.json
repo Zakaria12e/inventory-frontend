@@ -234,5 +234,38 @@
     "passwordMinLength": "Le mot de passe doit contenir au moins 6 caractères",
     "userCreated": "Utilisateur créé avec succès",
     "creationFailed": "Échec de la création de l'utilisateur"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "description": "Gérez les paramètres de votre compte et vos préférences",
+    "tabs": {
+      "profile": "Profil",
+      "notifications": "Notifications",
+      "appearance": "Apparence",
+      "security": "Sécurité"
+    }
+  },
+  "profile": {
+    "title": "Informations du profil",
+    "description": "Mettez à jour vos informations personnelles et votre photo de profil",
+    "changePhoto": "Changer la photo",
+    "change": "Changer",
+    "remove": "Supprimer",
+    "imageCleared": "Image supprimée. Cliquez sur 'Enregistrer les modifications' pour confirmer.",
+    "avatarNote": "JPG, PNG ou GIF. Max 2Mo.",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "email": "Adresse e-mail",
+    "phone": "Numéro de téléphone",
+    "bio": "Bio",
+    "firstNamePlaceholder": "Jean",
+    "lastNamePlaceholder": "Dupont",
+    "emailPlaceholder": "jean@example.com",
+    "phonePlaceholder": "+33 6 12 34 56 78",
+    "bioPlaceholder": "Parlez-nous de vous",
+    "saveChanges": "Enregistrer",
+    "saving": "Enregistrement...",
+    "updateSuccess": "Profil mis à jour avec succès",
+    "updateError": "Échec de la mise à jour du profil"
   }
 }
