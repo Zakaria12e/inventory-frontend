@@ -17,7 +17,7 @@ interface ItemData {
   name: string
   description: string
   quantity: number
-  unit: "pcs" | "kg" | "L"
+  unit: "pcs" | "kg" | "L" | "pack"
   categoryId: string
   lowStockThreshold: number
 }
@@ -130,8 +130,10 @@ export function ItemModal({ open, onOpenChange, onSave, categories, initialData,
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="pcs">pcs</SelectItem>
+                  <SelectItem value="pack">pack</SelectItem>
                   <SelectItem value="kg">kg</SelectItem>
                   <SelectItem value="L">L</SelectItem>
+                  
                 </SelectContent>
               </Select>
             </div>
