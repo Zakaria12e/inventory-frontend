@@ -361,13 +361,13 @@ export default function DashboardLayout({ children,}: { children: React.ReactNod
                   <DropdownMenuItem asChild>
                     <Link to="/dashboard/settings">
                       <Settings className="mr-2 h-4 w-4" />
-                      Settings
+                      {t("sidebar.profile-settings")}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={logout}>
                     <LogOut className="mr-2 h-4 w-4" />
-                    Log out
+                    {t("sidebar.logout")}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

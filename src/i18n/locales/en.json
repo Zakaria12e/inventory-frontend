@@ -25,7 +25,9 @@
     "users": "Users",
     "activity": "Activity Feed",
     "settings": "Settings",
-    "support": "Support"
+    "support": "Support",
+    "profile-settings": "Profile Settings",
+    "logout": "Log Out"
   },
   "inventory": {
     "title": "Inventory",

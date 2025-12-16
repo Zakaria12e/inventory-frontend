@@ -25,7 +25,9 @@
     "users": "Utilisateurs",
     "activity": "Flux d'activité",
     "settings": "Paramètres",
-    "support": "Support"
+    "support": "Support",
+    "profile-settings": "Paramètres du profil",
+    "logout": "Se déconnecter"
   },
   "inventory": {
     "title": "Inventaire",

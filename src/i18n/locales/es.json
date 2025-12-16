@@ -25,7 +25,10 @@
     "users": "Usuarios",
     "activity": "Actividad",
     "settings": "Ajustes",
-    "support": "Soporte"
+    "support": "Soporte",
+    "profile-settings": "Configuración de perfil",
+    "logout": "Cerrar sesión"
+
   },
   "inventory": {
     "title": "Inventario",
