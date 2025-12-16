@@ -267,6 +267,39 @@
     "saving": "Guardando...",
     "updateSuccess": "Perfil actualizado con éxito",
     "updateError": "Error al actualizar el perfil"
+  },
+  "notifications": {
+    "title": "Preferencias de notificación",
+    "description": "Elige cómo deseas recibir las notificaciones",
+    "emailNotifications": "Notificaciones por correo",
+    "emailNotificationsDesc": "Recibir notificaciones por correo electrónico",
+    "pushNotifications": "Notificaciones push",
+    "pushNotificationsDesc": "Recibir notificaciones push en el navegador",
+    "lowStockAlerts": "Alertas de stock bajo",
+    "lowStockAlertsDesc": "Recibir notificación cuando los artículos estén bajos",
+    "weeklyReports": "Informes semanales",
+    "weeklyReportsDesc": "Recibir informes semanales de inventario",
+    "save": "Guardar",
+    "saving": "Guardando...",
+    "saveSuccess": "Preferencias guardadas"
+  },
+  "security": {
+    "title": "Configuración de seguridad",
+    "description": "Administra la seguridad y privacidad de tu cuenta",
+    "changePassword": "Cambiar contraseña",
+    "currentPassword": "Contraseña actual",
+    "newPassword": "Nueva contraseña",
+    "confirmPassword": "Confirmar nueva contraseña",
+    "twoFactorAuth": "Autenticación de dos factores",
+    "twoFactorAuthDesc": "Agrega una capa extra de seguridad",
+    "sessionTimeout": "Tiempo de sesión (minutos)",
+    "session15": "15 minutos",
+    "session30": "30 minutos",
+    "session60": "1 hora",
+    "session120": "2 horas",
+    "save": "Guardar",
+    "saving": "Guardando...",
+    "saveSuccess": "Configuración de seguridad actualizada"
   }
 
 }

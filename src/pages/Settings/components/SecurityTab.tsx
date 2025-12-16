@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
@@ -12,11 +13,11 @@ import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@
 import { toast } from "sonner"
 
 export default function SecurityTab() {
+  const { t } = useTranslation()
   const [loading, setLoading] = useState(false)
   const [twoFactorAuth, setTwoFactorAuth] = useState(false)
   const [sessionTimeout, setSessionTimeout] = useState("30")
 
-  // Change password
   const [currentPassword, setCurrentPassword] = useState("")
   const [newPassword, setNewPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
@@ -33,8 +34,8 @@ export default function SecurityTab() {
     <div className="space-y-3 sm:space-y-4 mt-4 sm:mt-6">
       <Card>
         <CardHeader className="pb-3 sm:pb-4">
-          <CardTitle className="text-base sm:text-lg">Security Settings</CardTitle>
-          <CardDescription className="text-xs sm:text-sm">Manage your account security and privacy</CardDescription>
+          <CardTitle className="text-base sm:text-lg">{t("security.title")}</CardTitle>
+          <CardDescription className="text-xs sm:text-sm">{t("security.description")}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3 sm:space-y-6">
           
@@ -42,11 +43,11 @@ export default function SecurityTab() {
           <div className="space-y-2 sm:space-y-4">
             <h3 className="text-xs sm:text-sm font-semibold flex items-center gap-2">
               <Lock className="h-4 w-4" />
-              Change Password
+              {t("security.changePassword")}
             </h3>
             <div className="space-y-2 sm:space-y-3">
               <div className="space-y-1 sm:space-y-2">
-                <Label htmlFor="current-password" className="text-xs sm:text-sm">Current Password</Label>
+                <Label htmlFor="current-password" className="text-xs sm:text-sm">{t("security.currentPassword")}</Label>
                 <Input
                   id="current-password"
                   type="password"
@@ -57,7 +58,7 @@ export default function SecurityTab() {
                 />
               </div>
               <div className="space-y-1 sm:space-y-2">
-                <Label htmlFor="new-password" className="text-xs sm:text-sm">New Password</Label>
+                <Label htmlFor="new-password" className="text-xs sm:text-sm">{t("security.newPassword")}</Label>
                 <Input
                   id="new-password"
                   type="password"
@@ -68,7 +69,7 @@ export default function SecurityTab() {
                 />
               </div>
               <div className="space-y-1 sm:space-y-2">
-                <Label htmlFor="confirm-password" className="text-xs sm:text-sm">Confirm New Password</Label>
+                <Label htmlFor="confirm-password" className="text-xs sm:text-sm">{t("security.confirmPassword")}</Label>
                 <Input
                   id="confirm-password"
                   type="password"
@@ -88,9 +89,9 @@ export default function SecurityTab() {
             <div className="space-y-0.5 flex-1">
               <div className="flex items-center gap-2">
                 <Shield className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                <Label htmlFor="2fa" className="font-medium text-xs sm:text-sm">Two-Factor Authentication</Label>
+                <Label htmlFor="2fa" className="font-medium text-xs sm:text-sm">{t("security.twoFactorAuth")}</Label>
               </div>
-              <p className="text-xs text-muted-foreground hidden sm:block">Add an extra layer of security</p>
+              <p className="text-xs text-muted-foreground hidden sm:block">{t("security.twoFactorAuthDesc")}</p>
             </div>
             <Switch id="2fa" checked={twoFactorAuth} onCheckedChange={setTwoFactorAuth} />
           </div>
@@ -99,24 +100,24 @@ export default function SecurityTab() {
 
           {/* Session Timeout */}
           <div className="space-y-1.5 sm:space-y-2">
-            <Label htmlFor="sessionTimeout" className="text-xs sm:text-sm">Session Timeout (minutes)</Label>
+            <Label htmlFor="sessionTimeout" className="text-xs sm:text-sm">{t("security.sessionTimeout")}</Label>
             <Select value={sessionTimeout} onValueChange={setSessionTimeout}>
               <SelectTrigger id="sessionTimeout" className="h-8 sm:h-10 text-sm">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="15">15 minutes</SelectItem>
-                <SelectItem value="30">30 minutes</SelectItem>
-                <SelectItem value="60">1 hour</SelectItem>
-                <SelectItem value="120">2 hours</SelectItem>
+                <SelectItem value="15">{t("security.session15")}</SelectItem>
+                <SelectItem value="30">{t("security.session30")}</SelectItem>
+                <SelectItem value="60">{t("security.session60")}</SelectItem>
+                <SelectItem value="120">{t("security.session120")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div className="flex justify-end pt-2 sm:pt-4">
-            <Button onClick={() => handleSave(() => toast.success("Security settings updated"))} disabled={loading} className="gap-2 text-xs sm:text-sm">
+            <Button onClick={() => handleSave(() => toast.success(t("security.saveSuccess")))} disabled={loading} className="gap-2 text-xs sm:text-sm">
               <Save className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-              {loading ? "Saving..." : "Save"}
+              {loading ? t("security.saving") : t("security.save")}
             </Button>
           </div>
         </CardContent>

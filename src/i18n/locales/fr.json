@@ -267,5 +267,38 @@
     "saving": "Enregistrement...",
     "updateSuccess": "Profil mis à jour avec succès",
     "updateError": "Échec de la mise à jour du profil"
+  },
+  "notifications": {
+    "title": "Préférences de notifications",
+    "description": "Choisissez comment vous souhaitez recevoir les notifications",
+    "emailNotifications": "Notifications par e-mail",
+    "emailNotificationsDesc": "Recevoir les notifications par e-mail",
+    "pushNotifications": "Notifications push",
+    "pushNotificationsDesc": "Recevoir les notifications push dans le navigateur",
+    "lowStockAlerts": "Alertes de stock faible",
+    "lowStockAlertsDesc": "Être averti lorsque les articles sont presque épuisés",
+    "weeklyReports": "Rapports hebdomadaires",
+    "weeklyReportsDesc": "Recevoir un résumé hebdomadaire de l'inventaire",
+    "save": "Enregistrer",
+    "saving": "Enregistrement...",
+    "saveSuccess": "Préférences enregistrées"
+  },
+  "security": {
+    "title": "Paramètres de sécurité",
+    "description": "Gérez la sécurité et la confidentialité de votre compte",
+    "changePassword": "Changer le mot de passe",
+    "currentPassword": "Mot de passe actuel",
+    "newPassword": "Nouveau mot de passe",
+    "confirmPassword": "Confirmer le nouveau mot de passe",
+    "twoFactorAuth": "Authentification à deux facteurs",
+    "twoFactorAuthDesc": "Ajoutez une couche de sécurité supplémentaire",
+    "sessionTimeout": "Durée de session (minutes)",
+    "session15": "15 minutes",
+    "session30": "30 minutes",
+    "session60": "1 heure",
+    "session120": "2 heures",
+    "save": "Enregistrer",
+    "saving": "Enregistrement...",
+    "saveSuccess": "Paramètres de sécurité mis à jour"
   }
 }

@@ -80,8 +80,8 @@ export default function AppearanceTab() {
         <Separator />
 
         {/* LANGUAGE */}
-        <div>
-          <Label>{t("appearance.language")}</Label>
+        <div  className="grid grid-cols-3 gap-3 mt-2">
+          <div><Label className="mb-2">{t("appearance.language")}</Label>
           <Select value={language} onValueChange={setLanguage}>
             <SelectTrigger>
               <SelectValue />
@@ -91,12 +91,11 @@ export default function AppearanceTab() {
               <SelectItem value="fr">Français</SelectItem>
               <SelectItem value="es">Español</SelectItem>
             </SelectContent>
-          </Select>
-        </div>
+          </Select></div>
+          
 
-        {/* DATE FORMAT */}
-        <div>
-          <Label>{t("appearance.dateFormat")}</Label>
+          <div>
+          <Label className="mb-2">{t("appearance.dateFormat")}</Label>
           <Select value={dateFormat} onValueChange={setDateFormat}>
             <SelectTrigger>
               <SelectValue />
@@ -108,6 +107,10 @@ export default function AppearanceTab() {
             </SelectContent>
           </Select>
         </div>
+        </div>
+
+        {/* DATE FORMAT */}
+        
 
         {/* SAVE BUTTON */}
         <Button onClick={handleSave} disabled={loading}>

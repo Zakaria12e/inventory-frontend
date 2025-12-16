@@ -268,5 +268,38 @@
     "saving": "Saving...",
     "updateSuccess": "Profile updated successfully",
     "updateError": "Failed to update profile"
+  },
+  "notifications": {
+    "title": "Notification Preferences",
+    "description": "Choose how you want to receive notifications",
+    "emailNotifications": "Email Notifications",
+    "emailNotificationsDesc": "Receive notifications via email",
+    "pushNotifications": "Push Notifications",
+    "pushNotificationsDesc": "Receive push notifications in browser",
+    "lowStockAlerts": "Low Stock Alerts",
+    "lowStockAlertsDesc": "Get notified when items are running low",
+    "weeklyReports": "Weekly Reports",
+    "weeklyReportsDesc": "Receive weekly inventory summary reports",
+    "save": "Save",
+    "saving": "Saving...",
+    "saveSuccess": "Preferences saved"
+  },
+  "security": {
+    "title": "Security Settings",
+    "description": "Manage your account security and privacy",
+    "changePassword": "Change Password",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm New Password",
+    "twoFactorAuth": "Two-Factor Authentication",
+    "twoFactorAuthDesc": "Add an extra layer of security",
+    "sessionTimeout": "Session Timeout (minutes)",
+    "session15": "15 minutes",
+    "session30": "30 minutes",
+    "session60": "1 hour",
+    "session120": "2 hours",
+    "save": "Save",
+    "saving": "Saving...",
+    "saveSuccess": "Security settings updated"
   }
 }
