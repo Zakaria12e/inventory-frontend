@@ -17,13 +17,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner"
 import { ItemModal } from "./item-modal"
 import { useAuth } from "@/context/AuthContext"
+import { useTranslation } from "react-i18next"
 
 interface Item {
   id: string
   name: string
   description: string
   quantity: number
-  unit: "pcs" | "kg" | "L"
+  unit: "pcs" | "kg" | "L" | "pack"
   categoryId: string
   category?: { id: string; name: string }
   lowStockThreshold: number
@@ -35,6 +36,7 @@ interface Category {
 }
 
 export default function InventoryPage() {
+  const { t } = useTranslation()
   const { user } = useAuth()
   const [items, setItems] = useState<Item[]>([])
   const [categories, setCategories] = useState<Category[]>([])
@@ -51,6 +53,7 @@ export default function InventoryPage() {
   const itemsPerPage = 10
   const isEmploye = user?.role === "employe"
 
+  // Load categories
   useEffect(() => {
     fetch(`${API_URL}/categories`)
       .then((res) => res.json())
@@ -60,13 +63,14 @@ export default function InventoryPage() {
           .map((cat: any) => ({ id: cat._id, name: cat.name }))
         setCategories(validCategories)
       })
-      .catch(() => toast.error("Failed to load categories"))
-  }, [])
+      .catch(() => toast.error(t("inventory.failedLoadCategories")))
+  }, [t])
 
+  // Load items
   const fetchItems = async () => {
     try {
       const res = await fetch(`${API_URL}/items`)
-      if (!res.ok) throw new Error("Failed to fetch items")
+      if (!res.ok) throw new Error(t("inventory.failedFetchItems"))
       const data = await res.json()
       const mappedItems: Item[] = data.map((item: any) => ({
         id: item._id,
@@ -81,7 +85,7 @@ export default function InventoryPage() {
       setItems(mappedItems)
     } catch (error: any) {
       console.error(error)
-      toast.error(error.message || "Failed to fetch items.")
+      toast.error(error.message || t("inventory.failedFetchItems"))
     }
   }
 
@@ -89,6 +93,7 @@ export default function InventoryPage() {
     fetchItems()
   }, [])
 
+  // Add item
   const handleAddItem = async (itemData: Omit<Item, "id">) => {
     try {
       const res = await fetch(`${API_URL}/items`, {
@@ -99,18 +104,19 @@ export default function InventoryPage() {
         },
         body: JSON.stringify({ ...itemData, category: itemData.categoryId }),
       })
-      if (!res.ok) throw new Error("Failed to add item")
+      if (!res.ok) throw new Error(t("inventory.failedAddItem"))
       const newItem = await res.json()
       const categoryObj = categories.find((c) => c.id === newItem.category)
       setItems([...items, { ...newItem, id: newItem._id, categoryId: newItem.category, category: categoryObj }])
       setShowModal(false)
-      toast.success(`${newItem.name} added.`)
+      toast.success(t("inventory.itemAdded", { name: newItem.name }))
     } catch (error: any) {
       console.error(error)
-      toast.error(error.message || "Failed to add item.")
+      toast.error(error.message || t("inventory.failedAddItem"))
     }
   }
 
+  // Edit item
   const handleEditItem = async (itemData: Omit<Item, "id">) => {
     if (!editingItem) return
     try {
@@ -122,7 +128,7 @@ export default function InventoryPage() {
         },
         body: JSON.stringify({ ...itemData, category: itemData.categoryId }),
       })
-      if (!res.ok) throw new Error("Failed to update item")
+      if (!res.ok) throw new Error(t("inventory.failedUpdateItem"))
       const updatedItem = await res.json()
       const categoryObj = categories.find((c) => c.id === itemData.categoryId)
       setItems(
@@ -134,31 +140,31 @@ export default function InventoryPage() {
       )
       setEditingItem(null)
       setShowModal(false)
-      toast.success(`${updatedItem.name} updated.`)
+      toast.success(t("inventory.itemUpdated", { name: updatedItem.name }))
     } catch (error: any) {
       console.error(error)
-      toast.error(error.message || "Failed to update item.")
+      toast.error(error.message || t("inventory.failedUpdateItem"))
     }
   }
 
+  // Delete item
   const handleDeleteItem = async (id: string) => {
     try {
       const res = await fetch(`${API_URL}/items/${id}`, {
         method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       })
-      if (!res.ok) throw new Error("Failed to delete item")
+      if (!res.ok) throw new Error(t("inventory.failedDeleteItem"))
       setItems(items.filter((item) => item.id !== id))
       setDeletingId(null)
-      toast.success("Item deleted.")
+      toast.success(t("inventory.itemDeleted"))
     } catch (error: any) {
       console.error(error)
-      toast.error(error.message || "Failed to delete item.")
+      toast.error(error.message || t("inventory.failedDeleteItem"))
     }
   }
 
+  // Filter, sort, paginate
   const filteredItems = items
     .filter(
       (item) =>
@@ -178,22 +184,24 @@ export default function InventoryPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       <div className="flex flex-col gap-6 px-4 py-6 md:px-8 md:py-8 lg:px-12 max-w-7xl mx-auto w-full">
+        {/* Header */}
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
             <div className="p-2 rounded-lg bg-primary/10">
               <Package className="w-5 h-5 text-primary" />
             </div>
-            <h1 className="text-3xl font-bold tracking-tight text-foreground">Inventory</h1>
+            <h1 className="text-3xl font-bold tracking-tight text-foreground">{t("inventory.title")}</h1>
           </div>
-          <p className="text-sm text-muted-foreground">Manage and track your inventory items efficiently</p>
+          <p className="text-sm text-muted-foreground">{t("inventory.description")}</p>
         </div>
 
+        {/* Filters */}
         <div className="flex flex-col gap-3">
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
-                placeholder="Search items by name or description..."
+                placeholder={t("inventory.searchPlaceholder")}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10 bg-background border-input h-10"
@@ -202,10 +210,10 @@ export default function InventoryPage() {
 
             <Select value={categoryFilter} onValueChange={setCategoryFilter}>
               <SelectTrigger className="w-full sm:w-48 h-10">
-                <SelectValue placeholder="All categories" />
+                <SelectValue placeholder={t("inventory.allCategories")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All categories</SelectItem>
+                <SelectItem value="all">{t("inventory.allCategories")}</SelectItem>
                 {categories.map((cat) => (
                   <SelectItem key={cat.id} value={cat.id}>
                     {cat.name}
@@ -216,11 +224,11 @@ export default function InventoryPage() {
 
             <Select value={sortBy} onValueChange={(v) => setSortBy(v as any)}>
               <SelectTrigger className="w-full sm:w-48 h-10">
-                <SelectValue placeholder="Sort by" />
+                <SelectValue placeholder={t("inventory.sortBy")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="name">Sort by Name</SelectItem>
-                <SelectItem value="quantity">Sort by Quantity</SelectItem>
+                <SelectItem value="name">{t("inventory.sortByName")}</SelectItem>
+                <SelectItem value="quantity">{t("inventory.sortByQuantity")}</SelectItem>
               </SelectContent>
             </Select>
 
@@ -232,18 +240,19 @@ export default function InventoryPage() {
                 }}
                 className="gap-2 h-10 whitespace-nowrap"
               >
-                <Plus className="w-4 h-4" /> Add Item
+                <Plus className="w-4 h-4" /> {t("inventory.addItem")}
               </Button>
             )}
           </div>
         </div>
 
+        {/* Desktop Table */}
         <div className="hidden md:block">
           {paginatedItems.length === 0 ? (
             <Card className="border-0 shadow-sm">
               <CardContent className="flex flex-col items-center justify-center py-16">
                 <Package className="w-12 h-12 text-muted-foreground/30 mb-3" />
-                <p className="text-muted-foreground">No items found. Create your first item to get started.</p>
+                <p className="text-muted-foreground">{t("inventory.noItems")}</p>
               </CardContent>
             </Card>
           ) : (
@@ -251,11 +260,11 @@ export default function InventoryPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-border bg-muted/40 hover:bg-muted/40">
-                    <th className="px-6 py-4 text-left font-semibold text-foreground">Item</th>
-                    <th className="px-6 py-4 text-left font-semibold text-foreground">Category</th>
-                    <th className="px-6 py-4 text-left font-semibold text-foreground">Quantity</th>
-                    <th className="px-6 py-4 text-left font-semibold text-foreground">Status</th>
-                    {!isEmploye && <th className="px-6 py-4 text-right font-semibold text-foreground">Actions</th>}
+                    <th className="px-6 py-4 text-left font-semibold text-foreground">{t("inventory.table.item")}</th>
+                    <th className="px-6 py-4 text-left font-semibold text-foreground">{t("inventory.table.category")}</th>
+                    <th className="px-6 py-4 text-left font-semibold text-foreground">{t("inventory.table.quantity")}</th>
+                    <th className="px-6 py-4 text-left font-semibold text-foreground">{t("inventory.table.status")}</th>
+                    {!isEmploye && <th className="px-6 py-4 text-right font-semibold text-foreground">{t("inventory.table.actions")}</th>}
                   </tr>
                 </thead>
                 <tbody>
@@ -283,17 +292,16 @@ export default function InventoryPage() {
                           </span>
                         </td>
                         <td className="px-6 py-4">
-                          {isLowStock ? (
-                            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-destructive/10 text-destructive border border-destructive/20">
-                              <span className="w-2 h-2 rounded-full bg-destructive"></span>
-                              Low Stock
-                            </span>
-                          ) : (
-                            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-green-500/10 text-green-700 dark:text-green-400 border border-green-500/20">
-                              <span className="w-2 h-2 rounded-full bg-green-500"></span>
-                              In Stock
-                            </span>
-                          )}
+                          <span
+                            className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium ${
+                              isLowStock
+                                ? "bg-destructive/10 text-destructive border border-destructive/20"
+                                : "bg-green-500/10 text-green-700 dark:text-green-400 border border-green-500/20"
+                            }`}
+                          >
+                            <span className={`w-2 h-2 rounded-full ${isLowStock ? "bg-destructive" : "bg-green-500"}`}></span>
+                            {isLowStock ? t("inventory.status.lowStock") : t("inventory.status.inStock")}
+                          </span>
                         </td>
                         {!isEmploye && (
                           <td className="px-6 py-4">
@@ -329,12 +337,13 @@ export default function InventoryPage() {
           )}
         </div>
 
+        {/* Mobile view */}
         <div className="md:hidden grid grid-cols-1 gap-3">
           {paginatedItems.length === 0 ? (
             <Card className="border-0 shadow-sm">
               <CardContent className="flex flex-col items-center justify-center py-12">
                 <Package className="w-12 h-12 text-muted-foreground/30 mb-3" />
-                <p className="text-muted-foreground text-sm">No items found yet</p>
+                <p className="text-muted-foreground text-sm">{t("inventory.noItems")}</p>
               </CardContent>
             </Card>
           ) : (
@@ -349,7 +358,7 @@ export default function InventoryPage() {
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex-1 min-w-0">
                         <h3 className="font-semibold text-foreground text-base leading-tight truncate">{item.name}</h3>
-                        <p className="text-xs text-muted-foreground mt-1">{item.category?.name || "Uncategorized"}</p>
+                        <p className="text-xs text-muted-foreground mt-1">{item.category?.name || t("inventory.uncategorized")}</p>
                       </div>
                       <div
                         className={`px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap flex items-center gap-1.5 ${
@@ -361,7 +370,7 @@ export default function InventoryPage() {
                         <span
                           className={`w-1.5 h-1.5 rounded-full ${isLowStock ? "bg-destructive" : "bg-green-500"}`}
                         ></span>
-                        {isLowStock ? "Low" : "In Stock"}
+                        {isLowStock ? t("inventory.status.lowStock") : t("inventory.status.inStock")}
                       </div>
                     </div>
 
@@ -371,7 +380,7 @@ export default function InventoryPage() {
 
                     <div className="flex items-center justify-between pt-1">
                       <div>
-                        <p className="text-xs text-muted-foreground">Quantity</p>
+                        <p className="text-xs text-muted-foreground">{t("inventory.table.quantity")}</p>
                         <p className={`font-semibold text-sm ${isLowStock ? "text-destructive" : "text-foreground"}`}>
                           {item.quantity} {item.unit}
                         </p>
@@ -408,85 +417,62 @@ export default function InventoryPage() {
           )}
         </div>
 
+        {/* Pagination */}
         {totalPages > 1 && (
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
             <p className="text-sm text-muted-foreground">
-              Showing <span className="font-semibold">{(currentPage - 1) * itemsPerPage + 1}</span> to{" "}
-              <span className="font-semibold">{Math.min(currentPage * itemsPerPage, filteredItems.length)}</span> of{" "}
-              <span className="font-semibold">{filteredItems.length}</span> items
+              {t("inventory.showing")} <span className="font-semibold">{(currentPage - 1) * itemsPerPage + 1}</span> {t("inventory.to")}{" "}
+              <span className="font-semibold">{Math.min(currentPage * itemsPerPage, filteredItems.length)}</span> {t("inventory.of")}{" "}
+              <span className="font-semibold">{filteredItems.length}</span> {t("inventory.items")}
             </p>
-            <div className="flex gap-2">
+            <div className="flex items-center gap-2">
               <Button
-                variant="outline"
                 size="sm"
-                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                variant="outline"
                 disabled={currentPage === 1}
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
               >
-                Previous
+                {t("inventory.prev")}
               </Button>
-              <div className="flex gap-1">
-                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                  let page: number
-                  if (totalPages <= 5) {
-                    page = i + 1
-                  } else if (currentPage <= 3) {
-                    page = i + 1
-                  } else if (currentPage >= totalPages - 2) {
-                    page = totalPages - 4 + i
-                  } else {
-                    page = currentPage - 2 + i
-                  }
-                  return (
-                    <Button
-                      key={page}
-                      variant={currentPage === page ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setCurrentPage(page)}
-                    >
-                      {page}
-                    </Button>
-                  )
-                })}
-              </div>
               <Button
-                variant="outline"
                 size="sm"
-                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                variant="outline"
                 disabled={currentPage === totalPages}
+                onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
               >
-                Next
+                {t("inventory.next")}
               </Button>
             </div>
           </div>
         )}
+
+        {/* Item Modal */}
+        <ItemModal
+          open={showModal}
+          onOpenChange={setShowModal}
+          onSave={editingItem ? handleEditItem : handleAddItem}
+          categories={categories}
+          initialData={editingItem ?? undefined}
+          isEditing={!!editingItem}
+        />
+
+        {/* Delete Dialog */}
+        <AlertDialog open={deletingId !== null} onOpenChange={(open) => !open && setDeletingId(null)}>
+          <AlertDialogContent>
+            <AlertDialogTitle>{t("inventory.deleteItemTitle")}</AlertDialogTitle>
+            <AlertDialogDescription>{t("inventory.deleteItemDescription")}</AlertDialogDescription>
+            <div className="flex gap-3 justify-end">
+              <AlertDialogCancel>{t("inventory.cancel")}</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => deletingId && handleDeleteItem(deletingId)}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              >
+                {t("inventory.delete")}
+              </AlertDialogAction>
+            </div>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
-
-      <ItemModal
-        open={showModal}
-        onOpenChange={setShowModal}
-        onSave={editingItem ? handleEditItem : handleAddItem}
-        categories={categories}
-        initialData={editingItem ?? undefined}
-        isEditing={!!editingItem}
-      />
-
-      <AlertDialog open={deletingId !== null} onOpenChange={(open) => !open && setDeletingId(null)}>
-        <AlertDialogContent>
-          <AlertDialogTitle>Delete Item</AlertDialogTitle>
-          <AlertDialogDescription>
-            Are you sure you want to delete this item? This action cannot be undone.
-          </AlertDialogDescription>
-          <div className="flex gap-3 justify-end">
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => deletingId && handleDeleteItem(deletingId)}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              Delete
-            </AlertDialogAction>
-          </div>
-        </AlertDialogContent>
-      </AlertDialog>
     </div>
   )
 }

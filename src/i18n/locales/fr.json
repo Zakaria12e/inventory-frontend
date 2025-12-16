@@ -26,5 +26,61 @@
     "activity": "Flux d'activité",
     "settings": "Paramètres",
     "support": "Support"
+  },
+  "inventory": {
+    "title": "Inventaire",
+    "description": "Gérez et suivez vos articles d'inventaire efficacement",
+    "searchPlaceholder": "Rechercher des articles par nom ou description...",
+    "allCategories": "Toutes les catégories",
+    "sortBy": "Trier par",
+    "sortByName": "Trier par nom",
+    "sortByQuantity": "Trier par quantité",
+    "addItem": "Ajouter un article",
+    "noItems": "Aucun article trouvé. Créez votre premier article pour commencer.",
+    "uncategorized": "Non catégorisé",
+    "status": {
+      "lowStock": "Stock faible",
+      "inStock": "En stock"
+    },
+    "table": {
+      "item": "Article",
+      "category": "Catégorie",
+      "quantity": "Quantité",
+      "status": "Statut",
+      "actions": "Actions"
+    },
+    "showing": "Affichage de",
+    "to": "à",
+    "of": "sur",
+    "prev": "Précédent",
+    "next": "Suivant",
+    "deleteItemTitle": "Supprimer l'article",
+    "deleteItemDescription": "Êtes-vous sûr de vouloir supprimer cet article ? Cette action est irréversible.",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "failedLoadCategories": "Échec du chargement des catégories",
+    "failedFetchItems": "Échec de la récupération des articles.",
+    "failedAddItem": "Échec de l'ajout de l'article.",
+    "failedUpdateItem": "Échec de la mise à jour de l'article.",
+    "failedDeleteItem": "Échec de la suppression de l'article.",
+    "itemAdded": "{{name}} ajouté.",
+    "itemUpdated": "{{name}} mis à jour.",
+    "itemDeleted": "Article supprimé."
+  },
+  "itemModal": {
+    "addTitle": "Ajouter un article",
+    "addDescription": "Remplissez les détails pour ajouter un nouvel article à l'inventaire.",
+    "editTitle": "Modifier l'article",
+    "editDescription": "Mettez à jour les informations de l'article ci-dessous.",
+    "name": "Nom de l'article",
+    "description": "Description",
+    "category": "Catégorie",
+    "quantity": "Quantité",
+    "unit": "Unité",
+    "units": { "pcs": "pcs", "pack": "pack", "kg": "kg", "L": "L" },
+    "lowStockThreshold": "Seuil de stock faible",
+    "cancel": "Annuler",
+    "add": "Ajouter",
+    "update": "Mettre à jour"
   }
 }

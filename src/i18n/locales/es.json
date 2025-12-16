@@ -26,6 +26,62 @@
     "activity": "Actividad",
     "settings": "Ajustes",
     "support": "Soporte"
+  },
+  "inventory": {
+    "title": "Inventario",
+    "description": "Administra y rastrea tus artículos de inventario de manera eficiente",
+    "searchPlaceholder": "Buscar artículos por nombre o descripción...",
+    "allCategories": "Todas las categorías",
+    "sortBy": "Ordenar por",
+    "sortByName": "Ordenar por nombre",
+    "sortByQuantity": "Ordenar por cantidad",
+    "addItem": "Agregar artículo",
+    "noItems": "No se encontraron artículos. Crea tu primer artículo para comenzar.",
+    "uncategorized": "Sin categoría",
+    "status": {
+      "lowStock": "Stock bajo",
+      "inStock": "En stock"
+    },
+    "table": {
+      "item": "Artículo",
+      "category": "Categoría",
+      "quantity": "Cantidad",
+      "status": "Estado",
+      "actions": "Acciones"
+    },
+    "showing": "Mostrando",
+    "to": "a",
+    "of": "de",
+    "prev": "Anterior",
+    "next": "Siguiente",
+    "deleteItemTitle": "Eliminar artículo",
+    "deleteItemDescription": "¿Estás seguro de que deseas eliminar este artículo? Esta acción no se puede deshacer.",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "failedLoadCategories": "Error al cargar las categorías",
+    "failedFetchItems": "Error al obtener los artículos.",
+    "failedAddItem": "Error al agregar el artículo.",
+    "failedUpdateItem": "Error al actualizar el artículo.",
+    "failedDeleteItem": "Error al eliminar el artículo.",
+    "itemAdded": "{{name}} agregado.",
+    "itemUpdated": "{{name}} actualizado.",
+    "itemDeleted": "Artículo eliminado."
+  },
+  "itemModal": {
+    "addTitle": "Agregar nuevo artículo",
+    "addDescription": "Complete los detalles para agregar un nuevo artículo al inventario.",
+    "editTitle": "Editar artículo",
+    "editDescription": "Actualiza la información del artículo a continuación.",
+    "name": "Nombre del artículo",
+    "description": "Descripción",
+    "category": "Categoría",
+    "quantity": "Cantidad",
+    "unit": "Unidad",
+    "units": { "pcs": "pcs", "pack": "paquete", "kg": "kg", "L": "L" },
+    "lowStockThreshold": "Umbral de stock bajo",
+    "cancel": "Cancelar",
+    "add": "Agregar artículo",
+    "update": "Actualizar artículo"
   }
 
 }

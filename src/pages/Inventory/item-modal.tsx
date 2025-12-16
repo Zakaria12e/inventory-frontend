@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useTranslation } from "react-i18next"
 
 interface Category {
   id: string
@@ -32,6 +33,7 @@ interface ItemModalProps {
 }
 
 export function ItemModal({ open, onOpenChange, onSave, categories, initialData, isEditing }: ItemModalProps) {
+  const { t } = useTranslation()
   const [formData, setFormData] = useState<ItemData>({
     name: "",
     description: "",
@@ -68,14 +70,16 @@ export function ItemModal({ open, onOpenChange, onSave, categories, initialData,
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
-          <DialogTitle>{isEditing ? "Edit Item" : "Add New Item"}</DialogTitle>
-          <DialogDescription>{isEditing ? "Update the item information below." : "Fill in the details to add a new item to inventory."}</DialogDescription>
+          <DialogTitle>{isEditing ? t("itemModal.editTitle") : t("itemModal.addTitle")}</DialogTitle>
+          <DialogDescription>
+            {isEditing ? t("itemModal.editDescription") : t("itemModal.addDescription")}
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="item-name">Item Name</Label>
+              <Label htmlFor="item-name">{t("itemModal.name")}</Label>
               <Input
                 id="item-name"
                 value={formData.name}
@@ -84,7 +88,7 @@ export function ItemModal({ open, onOpenChange, onSave, categories, initialData,
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="item-category">Category</Label>
+              <Label htmlFor="item-category">{t("itemModal.category")}</Label>
               <Select value={formData.categoryId} onValueChange={(v) => setFormData({ ...formData, categoryId: v })}>
                 <SelectTrigger>
                   <SelectValue />
@@ -101,7 +105,7 @@ export function ItemModal({ open, onOpenChange, onSave, categories, initialData,
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="item-description">Description</Label>
+            <Label htmlFor="item-description">{t("itemModal.description")}</Label>
             <Textarea
               id="item-description"
               value={formData.description}
@@ -112,7 +116,7 @@ export function ItemModal({ open, onOpenChange, onSave, categories, initialData,
 
           <div className="grid grid-cols-3 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="item-quantity">Quantity</Label>
+              <Label htmlFor="item-quantity">{t("itemModal.quantity")}</Label>
               <Input
                 id="item-quantity"
                 type="number"
@@ -123,23 +127,22 @@ export function ItemModal({ open, onOpenChange, onSave, categories, initialData,
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="item-unit">Unit</Label>
-              <Select value={formData.unit} onValueChange={(v) => setFormData({ ...formData, unit: v as "pcs" | "kg" | "L" })}>
+              <Label htmlFor="item-unit">{t("itemModal.unit")}</Label>
+              <Select value={formData.unit} onValueChange={(v) => setFormData({ ...formData, unit: v as "pcs" | "kg" | "L" | "pack" })}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="pcs">pcs</SelectItem>
-                  <SelectItem value="pack">pack</SelectItem>
-                  <SelectItem value="kg">kg</SelectItem>
-                  <SelectItem value="L">L</SelectItem>
-                  
+                  <SelectItem value="pcs">{t("itemModal.units.pcs")}</SelectItem>
+                  <SelectItem value="pack">{t("itemModal.units.pack")}</SelectItem>
+                  <SelectItem value="kg">{t("itemModal.units.kg")}</SelectItem>
+                  <SelectItem value="L">{t("itemModal.units.L")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="item-threshold">Low Stock Threshold</Label>
+              <Label htmlFor="item-threshold">{t("itemModal.lowStockThreshold")}</Label>
               <Input
                 id="item-threshold"
                 type="number"
@@ -153,10 +156,10 @@ export function ItemModal({ open, onOpenChange, onSave, categories, initialData,
 
         <div className="flex gap-3 justify-end">
           <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Cancel
+            {t("itemModal.cancel")}
           </Button>
           <Button onClick={handleSave} disabled={!formData.name.trim()}>
-            {isEditing ? "Update Item" : "Add Item"}
+            {isEditing ? t("itemModal.update") : t("itemModal.add")}
           </Button>
         </div>
       </DialogContent>
