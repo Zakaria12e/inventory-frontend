@@ -139,25 +139,69 @@ export default function DashboardPage() {
         ) : (
           <>
             {/* ACTIVITY */}
-            <Card>
-              <CardHeader className="flex justify-between">
-                <div>
-                  <CardTitle>{t("dashboard.activity")}</CardTitle>
-                  <p className="text-sm text-muted-foreground">{t("dashboard.latestActions")}</p>
-                </div>
-                <Clock className="w-4 h-4" />
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {dashboard.panels.activities.map((a: any, i: number) => (
-                  <div key={a._id}>
-                    {i > 0 && <Separator />}
-                    <p className="text-sm">
-                      <span className="font-medium">{a.user?.name}</span> {a.action}
-                    </p>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
+<Card className="overflow-hidden">
+  <CardHeader className="px-5 py-4">
+    <div className="flex items-center justify-between">
+      <CardTitle className="text-base font-bold tracking-tight">
+        {t("dashboard.activity")}
+      </CardTitle>
+      <Clock className="w-4 h-4 text-muted-foreground" />
+    </div>
+  </CardHeader>
+
+  <CardContent className="p-0">
+    {dashboard.panels.activities.map((a: any, i: number) => (
+      <div key={a._id}>
+        {i > 0 && <div className="h-px bg-border/30 mx-5" />}
+        <div className="px-5 py-3 hover:bg-muted/20 transition-colors flex items-start gap-3">
+          
+          {/* Avatar */}
+          <div className="flex-shrink-0">
+            {a.user?.profile_image ? (
+              <img
+                src={a.user.profile_image}
+                alt={a.user?.first_name}
+                className="w-8 h-8 rounded-full object-cover"
+              />
+            ) : (
+              <div
+                className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white"
+                style={{ backgroundColor: a.user?.avatarColor || "#888" }}
+              >
+                {a.user?.first_name?.[0] || "?"}
+              </div>
+            )}
+          </div>
+
+          {/* Content */}
+          <div className="flex-1 flex flex-col">
+            <div className="flex justify-between items-start">
+              <div className="flex flex-col">
+                {/* Name */}
+                <span className="text-sm font-semibold text-foreground">
+                  {a.user?.first_name}
+                </span>
+
+                {/* Action */}
+                <span className="text-xs text-muted-foreground mt-0.5 truncate">
+                  {a.action}
+                </span>
+              </div>
+
+              {/* Timestamp */}
+              <span className="text-[10px] text-muted-foreground whitespace-nowrap">
+                {formatDate(a.timestamp)}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    ))}
+  </CardContent>
+</Card>
+
+
+
 
             {/* ALERTS */}
             <Card>
