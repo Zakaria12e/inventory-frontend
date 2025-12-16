@@ -210,5 +210,29 @@
       "admin": "Admin",
       "employe": "Employé"
     }
+  },
+  "userModal": {
+    "title": "Créer un nouvel utilisateur",
+    "description": "Ajoutez un nouvel utilisateur à votre système. Remplissez toutes les informations requises ci-dessous.",
+    "firstName": "Prénom",
+    "firstNamePlaceholder": "Jean",
+    "lastName": "Nom",
+    "lastNamePlaceholder": "Dupont",
+    "email": "Adresse e-mail",
+    "emailPlaceholder": "jean.dupont@example.com",
+    "password": "Mot de passe",
+    "passwordHint": "Doit contenir au moins 6 caractères",
+    "role": "Rôle",
+    "rolePlaceholder": "Sélectionnez un rôle",
+    "employee": "Employé",
+    "admin": "Administrateur",
+    "cancel": "Annuler",
+    "createUser": "Créer l'utilisateur",
+    "creating": "Création...",
+    "allFieldsRequired": "Tous les champs sont requis",
+    "invalidEmail": "Veuillez entrer une adresse e-mail valide",
+    "passwordMinLength": "Le mot de passe doit contenir au moins 6 caractères",
+    "userCreated": "Utilisateur créé avec succès",
+    "creationFailed": "Échec de la création de l'utilisateur"
   }
 }

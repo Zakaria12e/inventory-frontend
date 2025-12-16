@@ -210,6 +210,30 @@
       "admin": "Admin",
       "employe": "Empleado"
     }
+  },
+  "userModal": {
+    "title": "Crear nuevo usuario",
+    "description": "Agrega un nuevo usuario a tu sistema. Completa toda la información requerida a continuación.",
+    "firstName": "Nombre",
+    "firstNamePlaceholder": "Juan",
+    "lastName": "Apellido",
+    "lastNamePlaceholder": "Pérez",
+    "email": "Correo electrónico",
+    "emailPlaceholder": "juan.perez@example.com",
+    "password": "Contraseña",
+    "passwordHint": "Debe tener al menos 6 caracteres",
+    "role": "Rol",
+    "rolePlaceholder": "Selecciona un rol",
+    "employee": "Empleado",
+    "admin": "Administrador",
+    "cancel": "Cancelar",
+    "createUser": "Crear usuario",
+    "creating": "Creando...",
+    "allFieldsRequired": "Todos los campos son obligatorios",
+    "invalidEmail": "Por favor ingrese un correo válido",
+    "passwordMinLength": "La contraseña debe tener al menos 6 caracteres",
+    "userCreated": "Usuario creado exitosamente",
+    "creationFailed": "Error al crear usuario"
   }
 
 }
