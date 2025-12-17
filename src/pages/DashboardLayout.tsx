@@ -52,25 +52,27 @@ import { ModeToggle } from "@/components/mode-toggle";
 import AlertBell from "@/pages/Alerts/AlertBell";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/AuthContext";
-import { useTranslation } from "react-i18next"
+import { useTranslation } from "react-i18next";
 
-export default function DashboardLayout({ children,}: { children: React.ReactNode;}) {
-
- const { user, loading , logout } = useAuth();
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const { user, loading, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const { t } = useTranslation()
-
+  const { t } = useTranslation();
 
   const colorMap: Record<string, string> = {
-  "bg-red-500": "#ef4444",
-  "bg-green-500": "#22c55e",
-  "bg-blue-500": "#3b82f6",
-  "bg-yellow-500": "#eab308",
-  "bg-purple-500": "#8b5cf6",
-  "bg-pink-500": "#ec4899",
-  "bg-orange-500": "#f97316",
-};
+    "bg-red-500": "#ef4444",
+    "bg-green-500": "#22c55e",
+    "bg-blue-500": "#3b82f6",
+    "bg-yellow-500": "#eab308",
+    "bg-purple-500": "#8b5cf6",
+    "bg-pink-500": "#ec4899",
+    "bg-orange-500": "#f97316",
+  };
 
   // Redirect if not logged in
   useEffect(() => {
@@ -79,7 +81,6 @@ export default function DashboardLayout({ children,}: { children: React.ReactNod
 
   if (loading) return <div>Loading...</div>;
   if (!user) return null;
-
 
   // ✅ Sidebar routes
   const routes = [
@@ -97,6 +98,15 @@ export default function DashboardLayout({ children,}: { children: React.ReactNod
       color: "text-fuchsia-400 dark:text-fuchsia-300",
       visible: true,
     },
+    {
+      to: "/dashboard/containers",
+      label: t("sidebar.containers"),
+      icon: "image",
+      image:
+        "https://res.cloudinary.com/dectxiuco/image/upload/v1765975240/recipient-removebg-preview_hofbfv.png",
+      visible: true,
+    },
+
     {
       to: "/dashboard/categories",
       label: t("sidebar.categories"),
@@ -150,26 +160,34 @@ export default function DashboardLayout({ children,}: { children: React.ReactNod
 
   // ✅ Breadcrumb logic
   const generateBreadcrumb = (pathname: string) => {
-    const segments = pathname.split("/").filter(Boolean)
-    const items: { label: string; href: string; isLast: boolean }[] = []
+    const segments = pathname.split("/").filter(Boolean);
+    const items: { label: string; href: string; isLast: boolean }[] = [];
 
     if (segments.length > 1) {
-      items.push({ label: t("sidebar.dashboard"), href: "/dashboard", isLast: false })
+      items.push({
+        label: t("sidebar.dashboard"),
+        href: "/dashboard",
+        isLast: false,
+      });
       if (segments[1]) {
         items.push({
           label: t(`sidebar.${segments[1]}`) || segments[1],
           href: pathname,
           isLast: true,
-        })
+        });
       }
     } else {
-      items.push({ label: t("sidebar.dashboard"), href: "/dashboard", isLast: true })
+      items.push({
+        label: t("sidebar.dashboard"),
+        href: "/dashboard",
+        isLast: true,
+      });
     }
 
-    return items
-  }
+    return items;
+  };
 
-  const breadcrumbItems = generateBreadcrumb(location.pathname)
+  const breadcrumbItems = generateBreadcrumb(location.pathname);
 
   return (
     <SidebarProvider>
@@ -237,18 +255,30 @@ export default function DashboardLayout({ children,}: { children: React.ReactNod
                 {routes
                   .filter(
                     (r) =>
-                      ["/dashboard/inventory", "/dashboard/categories"].includes(
-                        r.to
-                      ) && r.visible
+                      [
+                        "/dashboard/inventory",
+                        "/dashboard/containers",
+                        "/dashboard/categories",
+                      ].includes(r.to) && r.visible
                   )
                   .map((route) => {
-                    const Icon = route.icon;
                     const isActive = location.pathname === route.to;
                     return (
                       <SidebarMenuItem key={route.to}>
                         <SidebarMenuButton asChild isActive={isActive}>
                           <Link to={route.to}>
-                            <Icon className={cn("size-4", route.color)} />
+                            {route.icon === "image" ? (
+                              <img
+                                src={route.image}
+                                alt={route.label}
+                                className="h-4 w-4 object-contain opacity-80 dark:opacity-90"
+                              />
+                            ) : (
+                              <route.icon
+                                className={cn("size-4", route.color)}
+                              />
+                            )}
+
                             <span>{route.label}</span>
                           </Link>
                         </SidebarMenuButton>
@@ -339,9 +369,15 @@ export default function DashboardLayout({ children,}: { children: React.ReactNod
                         src={`${user.profile_image}`}
                         alt={user.first_name}
                       />
-<AvatarFallback style={{ backgroundColor: colorMap[user.avatarColor], color: "white" }} className="rounded-lg">
-  {user?.first_name?.charAt(0).toUpperCase() || "?"}
-</AvatarFallback>
+                      <AvatarFallback
+                        style={{
+                          backgroundColor: colorMap[user.avatarColor],
+                          color: "white",
+                        }}
+                        className="rounded-lg"
+                      >
+                        {user?.first_name?.charAt(0).toUpperCase() || "?"}
+                      </AvatarFallback>
                     </Avatar>
                     <div className="grid flex-1 text-left text-sm leading-tight">
                       <span className="truncate font-semibold">

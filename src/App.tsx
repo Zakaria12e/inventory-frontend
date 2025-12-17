@@ -11,6 +11,7 @@ import AlertsPage from "@/pages/Alerts/AlertsPage";
 import SettingsPage from "@/pages/Settings/SettingsPage";
 import SupportPage from "@/pages/Support/SupportPage";
 import LoginPage from "@/pages/login/login";
+import ContainersPage from "@/pages/Containers/ContainersPage";
 import ActivityFeed from "@/pages/ActivityFeed/ActivityFeed";
 import { LanguageProvider } from "@/context/LanguageContext"
 
@@ -36,6 +37,7 @@ function App() {
                     <Route path="" element={<DashboardPage />} />
                     <Route path="inventory" element={<InventoryPage />} />
                     <Route path="categories" element={<CategoriesPage />} />
+                    <Route path="containers" element={<ContainersPage />} />
                     <Route path="reports" element={<ReportsPage />} />
                     <Route path="activity" element={<ActivityFeed />} />
                     <Route path="users" element={<UsersPage />} />
