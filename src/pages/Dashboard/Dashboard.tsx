@@ -10,6 +10,7 @@ import { Package, Folder, AlertTriangle, Clock } from "lucide-react"
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, AreaChart, Area } from "recharts"
 import { Separator } from "@/components/ui/separator"
 import { Skeleton } from "@/components/ui/skeleton"
+import Snowfall from 'react-snowfall';
 
 const API_URL = import.meta.env.VITE_API_URL
 
@@ -38,12 +39,15 @@ export default function DashboardPage() {
   }
 
   return (
+    
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
       className="flex flex-col gap-6 p-4 md:p-6 lg:p-8 max-w-7xl mx-auto w-full"
     >
+      <Snowfall color="#e1edf1ff"/>
+
       {/* HEADER */}
       <div>
         <h1 className="text-3xl font-bold tracking-tight">{t("dashboard.title")}</h1>
